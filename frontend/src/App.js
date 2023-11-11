@@ -1,10 +1,14 @@
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+
 import ScanScreen from "./Screens/ScanScreen";
 
 function App() {
   return (
-    <div className="App">
-      <ScanScreen />
-    </div>
+    <Router>
+      <Routes>
+        <Route path="/" element={<ScanScreen />} />
+      </Routes>
+    </Router>
   );
 }
 

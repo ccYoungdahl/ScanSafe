@@ -16,3 +16,11 @@ code {
   width: 700px;
   height: 400px;
 }
+
+#html5-qrcode-anchor-scan-type-change {
+  display: none;
+}
+
+#html5-qrcode-button-camera-stop {
+  display: none !important;
+}
