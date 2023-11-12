@@ -9,6 +9,8 @@ function ResultScreen() {
     const [ingredientList, setIngredientList] = useState([]);
     const [flaggedIngredientList, setFlaggedIngredientList] = useState([]);
     const [flaggedToRef, setFlaggedToRef] = useState({});
+    const [openFoodError, setOpenFoodError] = useState(false);
+    const [flaggedError, setFlaggedError] = useState(false);
 
     let { upc } = useParams();
     const navigate = useNavigate();
@@ -16,7 +18,10 @@ function ResultScreen() {
     const getProductInfo = () => {
         axios.get(`https://world.openfoodfacts.org/api/v2/product/${upc}.json`).then((response) => {
             setProductName(response.data.product.product_name);
-            setProductImageUrl(response.data.product.selected_images.front.display.en);
+
+            if (response.data.product.selected_images !== null && response.data.product.selected_images.front) {
+                setProductImageUrl(response.data.product.selected_images.front.display.en);
+            }
 
             const allergens = response.data.product.allergens_hierarchy;
             let allergensArr = [];
@@ -26,13 +31,17 @@ function ResultScreen() {
             });
             setAllergenList(allergensArr);
             
-            const ingredients = response.data.product.ingredients;
-            let ingredientArr = [];
-            ingredients.forEach((ingredient, _) => {
-                ingredientArr.push(ingredient.text);
-            });
-            setIngredientList(ingredientArr);
-        })
+            if (response.data.product.ingredients) {
+                const ingredients = response.data.product.ingredients;
+                let ingredientArr = [];
+                ingredients.forEach((ingredient, _) => {
+                    ingredientArr.push(ingredient.text);
+                });
+                setIngredientList(ingredientArr);
+            }
+        }).catch(error => {
+            setOpenFoodError(true);
+        });
     }
 
     const getFlaggedIngredients = () => {
@@ -48,6 +57,8 @@ function ResultScreen() {
             });
             setFlaggedToRef(flaggedToRefTemp);
             setFlaggedIngredientList(ingredientArr);
+        }).catch(error => {
+            setFlaggedError(true);
         })
     }
 
@@ -59,17 +70,26 @@ function ResultScreen() {
     return (
         <div>
             <div className="container py-5">
+                { openFoodError && 
+                    <div class="alert alert-danger fs-5" role="alert">Product not found in OpenFoodFacts database.</div>
+                }
+                { flaggedError && 
+                    <div class="alert alert-danger fs-5" role="alert">Unable to get flagged ingredient list.</div>
+                }
+
+                { !openFoodError && !flaggedError &&
                 <div className="row">
                 <div className="col-3">
-                    { productImageUrl ?
+                    { productImageUrl !== "" ?
                         <img src={productImageUrl} alt={"image of " + productName} className="rounded" style={{width: "250px"}} />
                     :
-                        <div></div>
+                        <div className="bg-secondary-subtle rounded w-100 h-100"></div>
                     }
                 </div>
-                    <div className="col">
+                    <div className="col ps-5">
                         <h1 className="mb-4">{productName}</h1>
 
+                        { ingredientList.length !== 0 ?
                         <p className="fs-4 text-body-secondary mb-4">
                             { ingredientList.map((ingredient, i) => {
                                 const flagged = flaggedIngredientList.includes(ingredient);
@@ -80,7 +100,7 @@ function ResultScreen() {
                                             <a href={reference} target="_blank" rel="noopener noreferrer">
                                                 <span key={ingredient} className="text-danger text-decoration-underline">
                                                     { ingredient.toLowerCase() }
-                                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-box-arrow-up-right" viewBox="0 0 16 16">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-box-arrow-up-right ms-1" viewBox="0 0 16 16">
                                                         <path fill-rule="evenodd" d="M8.636 3.5a.5.5 0 0 0-.5-.5H1.5A1.5 1.5 0 0 0 0 4.5v10A1.5 1.5 0 0 0 1.5 16h10a1.5 1.5 0 0 0 1.5-1.5V7.864a.5.5 0 0 0-1 0V14.5a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h6.636a.5.5 0 0 0 .5-.5z"/>
                                                         <path fill-rule="evenodd" d="M16 .5a.5.5 0 0 0-.5-.5h-5a.5.5 0 0 0 0 1h3.793L6.146 9.146a.5.5 0 1 0 .708.708L15 1.707V5.5a.5.5 0 0 0 1 0v-5z"/>
                                                     </svg>
@@ -96,19 +116,29 @@ function ResultScreen() {
                                 );
                             })}
                         </p>
+                        :
+                            <div class="alert alert-danger fs-5" role="alert">Ingredient list not found.</div>
+                        }
+                        
+                        { ingredientList.length !== 0 &&
+                            <p className="fs-5 text-body-secondary mb-5">
+                                Allergens: { allergenList.map((allergen, i) => {
+                                    return (
+                                        <span key={allergen}>
+                                            { allergen.toLowerCase() }
+                                            { i < allergenList.length - 1 && ", "}
+                                        </span>
+                                    );
+                                })}
+                            </p>
+                        }
 
-                        <p className="fs-5 text-body-secondary mb-5">
-                            Allergens: { allergenList.map((allergen, i) => {
-                                return (
-                                    <span key={allergen}>
-                                        { allergen.toLowerCase() }
-                                        { i < allergenList.length - 1 && ", "}
-                                    </span>
-                                );
-                            })}
-                        </p>
+                        <a href={`https://world.openfoodfacts.org/product/${upc}`} target="_blank" rel="noopener noreferrer">
+                            <button className="btn btn-success">See more</button>
+                        </a>
                     </div>
                 </div>
+                }
             </div>
         </div>
     );
