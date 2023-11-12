@@ -1,10 +1,7 @@
 package scansafe.app.scansafeapi.Controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import scansafe.app.scansafeapi.Models.Ingredient;
 import scansafe.app.scansafeapi.Repo.IngredientRepo;
 
@@ -21,6 +18,7 @@ public class ApiControllers {
         return "welcome!";
     }
 
+    @CrossOrigin
     @GetMapping(value = "/ingredients")
     public List<Ingredient> getIngredients() {
         return ingredientRepo.findAll();
