@@ -1,0 +1,9 @@
+com\ScanSafe\Influencer\InfluencerApplication.class
+Influencer\InfluencerController.class
+Influencer\InfluencerRepository.class
+AlternativeProduct\AlternativeProduct.class
+AlternativeProduct\AlternativeProductController.class
+AlternativeProduct\AlternativeProductRepository.class
+Influencer\Influencer.class
+AlternativeProduct\AlternativeProductService.class
+Influencer\InfluencerService.class
