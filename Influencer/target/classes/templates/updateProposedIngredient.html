@@ -23,13 +23,13 @@
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav me-auto mb-2 mb-lg-0 ml-auto">
           <li class="nav-item">
-              <a class="nav-link" href='influencerDashboard'>Dashboard</a>
+              <a th:href="@{/influencerDashboard}" class="nav-link">Dashboard</a>
           </li>
           <li class="nav-item">
-              <a class="nav-link" href='influencerListForm'>Suggest a product</a>
+              <a class="nav-link" th:href='@{/influencerListForm}'>Suggest a product</a>
           </li>
             
-          <!-- 
+            <!--
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
               Other
@@ -48,7 +48,7 @@
               <li><a class="dropdown-item" href="adminDashboard.html">Admin Home</a></li>
             </ul>
           </li>
-          -->
+           --> 
             
         </ul>
       </div>
@@ -56,17 +56,19 @@
 
     <div class= "container pt-5">
         
-        <h1 class="mb-4">New ingredient or additive proposal form</h1>
+        <h1 class="mb-4">Update your ingredient proposal</h1>
         
         <div class="bg-light-subtle p-4">
             
         <form action="#" th:action="@{/saveProposedIngredient}" th:object="${proposedIngredient}" method="POST">
-
+            
+            <input type="hidden" th:field="*{id}"/>
+            
             <div class="mb-3">
                 <div class="form-group">
                     <label for="ingredientName" class="form-label">Ingredient</label>
                         <div class= "input-group">
-                            <input type="text" th:field="*{name}" class="form-control" placeholder="Titanium dioxide, red 40, etc.">
+                            <input type="text" th:field="*{name}" class="form-control">
                             <span class="input-group-text" id="basic-addon2">check</span>
                         </div>
                 </div>
@@ -75,7 +77,7 @@
             <div class="mb-3">
                 <div class="form-group">
                     <label for="risks" class="form-label">Risks to humans</label>
-                    <input type="text" th:field= "*{risk}" class="form-control" id="risks" placeholder="It may damage DNA">
+                    <input type="text" th:field= "*{risk}" class="form-control" id="risks">
                 </div>
             </div>
             
@@ -111,7 +113,7 @@
             <div class="row mb-3">
                 <label for="ingredient" class="col-sm-2 col-form-label"></label>
                 <div class="col-sm-10">
-                    <a href='influencerDashboard'><button type="button" class="btn btn-light" style="float: right">Cancel</button></a>
+                    <a th:href="@{/influencerDashboard}"><button type="button" class="btn btn-light" style="float: right">Cancel</button></a>
                     <button type="submit" class="btn btn-success" style="float: right">Submit</button>
                 </div>
             </div>
