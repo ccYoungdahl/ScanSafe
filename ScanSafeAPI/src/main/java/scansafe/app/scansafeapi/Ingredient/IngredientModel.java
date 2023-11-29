@@ -1,8 +1,9 @@
-package scansafe.app.scansafeapi.Models;
+package scansafe.app.scansafeapi.Ingredient;
 import jakarta.persistence.*;
 
 @Entity
-public class Ingredient {
+@Table(name = "ingredient")
+public class IngredientModel {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
