@@ -16,7 +16,7 @@ function Navbar() {
                     <a className="nav-link" href="/">Scan</a>
                 </li>
                 <li className="nav-item">
-                    <a className="nav-link" href="your-ingredients.html">Your ingredients</a>
+                    <a className="nav-link" href="/your-ingredients">Your ingredients</a>
                 </li>
             </ul>
             </div>

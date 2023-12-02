@@ -9,6 +9,7 @@ function ResultScreen() {
     const [ingredientList, setIngredientList] = useState([]);
     const [flaggedIngredientList, setFlaggedIngredientList] = useState([]);
     const [flaggedToRef, setFlaggedToRef] = useState({});
+    const [personalIngredients, setPersonalIngredients] = useState([]);
     const [openFoodError, setOpenFoodError] = useState(false);
     const [flaggedError, setFlaggedError] = useState(false);
 
@@ -45,7 +46,7 @@ function ResultScreen() {
     }
 
     const getFlaggedIngredients = () => {
-        axios.get("http://localhost:8080/ingredients").then((response) => {
+        axios.get("http://localhost:8080/api/ingredients/all").then((response) => {
             const ingredients = response.data;
             let ingredientArr = [];
             let flaggedToRefTemp = {};
@@ -62,9 +63,23 @@ function ResultScreen() {
         })
     }
 
+    function getPersonalIngredients() {
+        axios.get("http://localhost:8080/api/personal-ingredients/all-from-user").then(response => {
+            const ingredients = response.data;
+            let ingredientArr = [];
+            ingredients.forEach((ingredient, _) => {
+                ingredientArr.push(ingredient.name);
+            });
+            setPersonalIngredients(ingredientArr);
+        }).catch(error => {
+            console.log(error);
+        })
+    }
+
     useEffect(() => {
         getProductInfo();
         getFlaggedIngredients();
+        getPersonalIngredients();
     }, [navigate]);
 
     return (
@@ -91,7 +106,7 @@ function ResultScreen() {
 
                         { ingredientList.length !== 0 ?
                         <p className="fs-4 text-body-secondary mb-4">
-                            { ingredientList.map((ingredient, i) => {
+                            {/* { ingredientList.map((ingredient, i) => {
                                 const flagged = flaggedIngredientList.includes(ingredient);
                                 const reference = flaggedToRef[ingredient.toLowerCase()];
                                 return (
@@ -114,6 +129,32 @@ function ResultScreen() {
                                             { i < ingredientList.length - 1 && ", "}
                                         </span>
                                 );
+                            })} */}
+
+                            { ingredientList.map((ingredient, i) => {
+                                const flagged = flaggedIngredientList.includes(ingredient);
+                                const personallyFlagged = personalIngredients.includes(ingredient);
+                                const reference = flaggedToRef[ingredient.toLowerCase()];
+                                return (
+                                    (flagged || personallyFlagged) ?
+                                        <span>
+                                            <a href={flagged ? reference : "/personal-ingredients"} target="_blank" rel="noopener noreferrer">
+                                                <span key={ingredient} className="text-danger text-decoration-underline">
+                                                    { ingredient.toLowerCase() }
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-box-arrow-up-right ms-1" viewBox="0 0 16 16">
+                                                        <path fill-rule="evenodd" d="M8.636 3.5a.5.5 0 0 0-.5-.5H1.5A1.5 1.5 0 0 0 0 4.5v10A1.5 1.5 0 0 0 1.5 16h10a1.5 1.5 0 0 0 1.5-1.5V7.864a.5.5 0 0 0-1 0V14.5a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h6.636a.5.5 0 0 0 .5-.5z"/>
+                                                        <path fill-rule="evenodd" d="M16 .5a.5.5 0 0 0-.5-.5h-5a.5.5 0 0 0 0 1h3.793L6.146 9.146a.5.5 0 1 0 .708.708L15 1.707V5.5a.5.5 0 0 0 1 0v-5z"/>
+                                                    </svg>
+                                                </span>
+                                            </a>
+                                            { i < ingredientList.length - 1 && <span className="text-body-secondary">, </span>}
+                                        </span>
+                                    :
+                                    <span key={ingredient}>
+                                        { ingredient.toLowerCase() }
+                                        { i < ingredientList.length - 1 && ", "}
+                                    </span>
+                                )
                             })}
                         </p>
                         :
