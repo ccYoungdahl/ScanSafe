@@ -37,27 +37,4 @@ public class ProposedIngredientController {
         return proposedIngredientRepository.save(proposedIngredient);
     }
 
-    /*
-    @GetMapping("/influencerWatchlistForm")
-    public String showInfluencerWatchlistForm(Model model) {
-        ProposedIngredient proposedIngredient = new ProposedIngredient();
-        model.addAttribute("proposedIngredient", proposedIngredient);
-        return "influencerForm";
-    }
-
-    @GetMapping("/deleteProposedIngredient/id={propIngredientId}")
-    public String deleteAlternativeProduct(@PathVariable long propIngredientId) {
-        this.proposedIngredientService.deleteProposedIngredient(propIngredientId);
-        return "redirect:/influencerDashboard";
-    }
-
-    @GetMapping("/showFormForPropUpdate/id={propIngredientId}")
-    public String showFormForPropUpdate(@PathVariable long propIngredientId, Model model) {
-        // Get Alternative Product from the service
-        ProposedIngredient propIngredient = proposedIngredientService.getProposedIngredientByID(propIngredientId);
-        // Set Alternative Product as a model attribute to pre-populate the form
-        model.addAttribute("proposedIngredient", propIngredient);
-        return "updateProposedIngredient";
-    }
-     */
 }

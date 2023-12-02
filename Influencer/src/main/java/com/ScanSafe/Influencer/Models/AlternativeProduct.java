@@ -6,6 +6,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
+import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -14,6 +15,7 @@ import lombok.Setter;
  *
  * @author Robby Martin
  */
+@Data
 @Entity
 @Table(name = "alternative_product")
 @NoArgsConstructor
@@ -26,6 +28,7 @@ public class AlternativeProduct {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
+    private long userId;
     private String altProduct;
     private String replacesProduct;
     private String upc;
@@ -37,6 +40,5 @@ public class AlternativeProduct {
         this.upc = upc;
         this.notes = notes;
     }
-    
     
 }

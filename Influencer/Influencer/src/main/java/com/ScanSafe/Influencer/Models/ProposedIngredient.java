@@ -28,7 +28,7 @@ public class ProposedIngredient {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     
-    private long userID;
+    private long userId;
     private String name;
     private String risk;
     private String website;
