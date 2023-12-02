@@ -1,0 +1,9 @@
+com\ScanSafe\Influencer\Repositories\AlternativeProductRepository.class
+com\ScanSafe\Influencer\InfluencerApplication.class
+com\ScanSafe\Influencer\Models\ProposedIngredient.class
+com\ScanSafe\Influencer\Services\AlternativeProductService.class
+com\ScanSafe\Influencer\Controllers\ProposedIngredientController.class
+com\ScanSafe\Influencer\Repositories\ProposedIngredientRepository.class
+com\ScanSafe\Influencer\Services\ProposedIngredientService.class
+com\ScanSafe\Influencer\Models\AlternativeProduct.class
+com\ScanSafe\Influencer\Controllers\AlternativeProductController.class
