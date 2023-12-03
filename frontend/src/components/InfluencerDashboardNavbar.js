@@ -1,7 +1,4 @@
-// JavaScript source code
 import React from 'react'
-
-
 export default function InfluencerDashboardNavbar() {
 
     return (

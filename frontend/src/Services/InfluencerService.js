@@ -1,10 +1,10 @@
 import axios from 'axios';
 
-const PROPOSED_INGREDIENT_API_BASE_URL = "http://localhost:8080/getProposedIngredients";
-const SAVE_PROPOSED_INGREDIENT_API_BASE_URL = "http://localhost:8080/saveProposedIngredient";
+const PROPOSED_INGREDIENT_API_BASE_URL = "http://localhost:8080/api/proposedIngredients/all";
+const SAVE_PROPOSED_INGREDIENT_API_BASE_URL = "http://localhost:8080/api/proposedIngredients/save";
 
-const ALTERNATIVE_PRODUCT_API_BASE_URL = "http://localhost:8080/getAlternativeProducts";
-const SAVE_ALTERNATIVE_PRODUCT_API_BASE_URL = "http://localhost:8080/saveAlternativeProduct";
+const ALTERNATIVE_PRODUCT_API_BASE_URL = "http://localhost:8080/api/alternativeProducts/all";
+const SAVE_ALTERNATIVE_PRODUCT_API_BASE_URL = "http://localhost:8080/api/alternativeProducts/save";
 class InfluencerService {
 
     getProposedIngredients() {
