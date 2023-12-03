@@ -20,6 +20,9 @@ export default function InfluencerDashboardNavbar() {
                     <li className="nav-item">
                         <a className="nav-link" href='influencerWatchlistForm'>Add to watchlist</a>
                     </li>
+                    <li className="nav-item" style={{ textAlign: 'right' }}>
+                        <a className="nav-link" href='influencerWatchlistForm'>Log out</a>
+                    </li>
                 </ul>
             </div>
         </nav>

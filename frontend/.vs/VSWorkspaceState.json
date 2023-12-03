@@ -3,9 +3,8 @@
     "",
     "\\src",
     "\\src\\components",
-    "\\src\\Screens",
-    "\\src\\Services"
+    "\\src\\Screens"
   ],
-  "SelectedNode": "\\src\\Services\\InfluencerService.js",
+  "SelectedNode": "\\src\\components\\Navbar.js",
   "PreviewInSolutionExplorer": false
 }

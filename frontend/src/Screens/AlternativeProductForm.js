@@ -8,10 +8,10 @@ const AlternativeProductForm = () => {
 
     const [alternativeProduct, setAlternativeProduct] = useState({
 
-        altProduct: '',
-        replacesProduct: '',
-        upc: '',
-        notes: ''
+        altProduct: "",
+        replacesProduct: "",
+        upc: "",
+        notes: ""
     });
 
     const handleChange = (e) => {
@@ -25,7 +25,7 @@ const AlternativeProductForm = () => {
         }).catch((error) => {
             console.log(error);
         });
-        navigate('/InfluencerDashboard');
+        navigate("/InfluencerDashboard");
     };
 
 

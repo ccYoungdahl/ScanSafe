@@ -11,4 +11,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface ProposedIngredientRepository extends JpaRepository<ProposedIngredient, Long>{
     
+    ProposedIngredient findByName(String name);
 }

@@ -1,16 +1,18 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import InfluencerService from '../Services/InfluencerService';
+import React, { useEffect, useState } from "react";
+import { useNavigate, useParams } from 'react-router-dom';
+import InfluencerService from "../Services/InfluencerService";
 
-const ProposedIngredientForm = () => {
+const UpdateProposedIngredient = () => {
 
+    const { id } = useParams();
     const navigate = useNavigate();
 
     const [proposedIngredient, setProposedIngredient] = useState({
+        id: id,
         name: "",
         risk: "",
         website: "",
-        comments: "",
+        comments: ""
     });
 
     const handleChange = (e) => {
@@ -18,15 +20,27 @@ const ProposedIngredientForm = () => {
         setProposedIngredient({ ...proposedIngredient, [e.target.name]: value });
     };
 
-    const saveProposedIngredient = (e) => {
+    useEffect(() => {
+            const fetchData = async () => {
+                try {
+                const response = await InfluencerService.getProposedIngredientById(id);
+                setProposedIngredient(response.data);
+            } catch (error) {
+                console.log(error);
+            }
+        };
+
+        fetchData();
+    }, []);
+
+    const updateProposedIngredient = (e) => {
         e.preventDefault();
-        InfluencerService.saveProposedIngredient(proposedIngredient).then((response) => {
+        InfluencerService.updateProposedIngredient(proposedIngredient, id).then((response) => {
         }).catch((error) => {
             console.log(error);
         });
-        navigate('/InfluencerDashboard');
+        navigate("/InfluencerDashboard");
     };
-
 
     return (
         <div className="container pt-5">
@@ -40,10 +54,9 @@ const ProposedIngredientForm = () => {
                             <label for="ingredientName" className="form-label">Ingredient</label>
                             <div className="input-group">
 
-                                <input type="text" name="name" className="form-control" placeholder="Titanium dioxide, red 40, etc."
+                                <input type="text" name="name" className="form-control"
                                     value={proposedIngredient.name} onChange={(e) => handleChange(e)} />
-                                <span className="input-group-text" id="basic-addon2"><button type="button" className="btn btn-outline-dark">check</button></span>
-                               
+                                <span className="input-group-text" id="basic-addon2">check</span>
                             </div>
                         </div>
                     </div>
@@ -51,7 +64,7 @@ const ProposedIngredientForm = () => {
                     <div className="mb-3">
                         <div className="form-group">
                             <label for="risks" className="form-label">Risks to humans</label>
-                            <input type="text" name="risk" className="form-control" placeholder="It may damage DNA"
+                            <input type="text" name="risk" className="form-control"
                                 value={proposedIngredient.risk} onChange={(e) => handleChange(e)} />
                         </div>
                     </div>
@@ -79,15 +92,14 @@ const ProposedIngredientForm = () => {
                     <div className="row mb-3">
                         <label for="ingredient" className="col-sm-2 col-form-label"></label>
                         <div className="col-sm-10">
-                            <a href='InfluencerDashboard'><button type="button" className="btn btn-light" style={{ float: 'right' }} >Cancel</button></a>
-                            <button type="submit" className="btn btn-success" onClick={saveProposedIngredient} style={{ float: 'right' }} >Submit</button>
+                            <button type="button" onClick={() => navigate("/InfluencerDashboard")}  className="btn btn-light" style={{ float: 'right' }} >Cancel</button>
+                            <button type="submit" className="btn btn-success" onClick={updateProposedIngredient} style={{ float: 'right' }} >Submit</button>
                         </div>
                     </div>
 
                 </form>
             </div>
         </div>
-
     );
-}
-export default ProposedIngredientForm;
+};
+export default UpdateProposedIngredient;
