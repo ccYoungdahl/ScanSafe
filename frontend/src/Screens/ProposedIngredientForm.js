@@ -5,6 +5,7 @@ import InfluencerService from '../Services/InfluencerService';
 const ProposedIngredientForm = () => {
 
     const navigate = useNavigate();
+    const [checkProposal, setCheckProposal] = useState();
 
     const [proposedIngredient, setProposedIngredient] = useState({
         name: "",
@@ -27,6 +28,18 @@ const ProposedIngredientForm = () => {
         navigate('/InfluencerDashboard');
     };
 
+    const openModal = (e) => {
+        e.preventDefault();
+        InfluencerService.checkProposedIngredientWatchlist(proposedIngredient.name).then((response) => {
+            if (response.data) {
+                setCheckProposal("Ingredient is already in watchlist.");
+            } else {
+                setCheckProposal(null);
+            };
+        }).catch((error) => {
+            console.log(error);
+        });
+    };
 
     return (
         <div className="container pt-5">
@@ -42,9 +55,9 @@ const ProposedIngredientForm = () => {
 
                                 <input type="text" name="name" className="form-control" placeholder="Titanium dioxide, red 40, etc."
                                     value={proposedIngredient.name} onChange={(e) => handleChange(e)} />
-                                <span className="input-group-text" id="basic-addon2"><button type="button" className="btn btn-outline-dark">check</button></span>
-                               
+                                <span className="input-group-text" id="basic-addon2"><button onClick={openModal} type="button" className="btn btn-outline-dark">check</button></span>
                             </div>
+                            {checkProposal && <div className="form-text" id="basic-addon4">{checkProposal}</div>}
                         </div>
                     </div>
 
@@ -80,7 +93,7 @@ const ProposedIngredientForm = () => {
                         <label for="ingredient" className="col-sm-2 col-form-label"></label>
                         <div className="col-sm-10">
                             <a href='InfluencerDashboard'><button type="button" className="btn btn-light" style={{ float: 'right' }} >Cancel</button></a>
-                            <button type="submit" className="btn btn-success" onClick={saveProposedIngredient} style={{ float: 'right' }} >Submit</button>
+                            <button disabled={checkProposal} type="submit" className="btn btn-success" onClick={saveProposedIngredient} style={{ float: 'right' }} >Submit</button>
                         </div>
                     </div>
 

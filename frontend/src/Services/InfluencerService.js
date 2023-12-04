@@ -22,7 +22,7 @@ class InfluencerService {
     }
 
     checkProposedIngredientWatchlist(name) {
-        return axios.get(PROPOSED_INGREDIENT_API_BASE_URL + "/findByName/" + name);
+        return axios.get("/api/ingredients/findByName/" + name);
     }
 
     updateProposedIngredient(proposedIngredient, id) {

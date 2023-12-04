@@ -10,11 +10,12 @@ import UpdateAlternativeProduct from './Screens/UpdateAlternativeProduct';
 import UpdateProposedIngredient from './Screens/UpdateProposedIngredient';
 
 import Navbar from "./components/Navbar";
+import InfluencerDashboardNavbar from "./components/InfluencerDashboardNavbar";
 
 function App() {
   return (
-    <Router>
-      <Navbar />
+      <Router>
+          <Navbar />
       <Routes>
         <Route path="/" element={<ScanScreen />} />
         <Route path="product">
