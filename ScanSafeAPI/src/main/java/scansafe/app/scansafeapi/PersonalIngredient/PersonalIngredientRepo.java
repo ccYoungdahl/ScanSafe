@@ -8,5 +8,6 @@ import java.util.List;
 
 @Repository
 public interface PersonalIngredientRepo extends JpaRepository<PersonalIngredientModel, Long> {
-    List<PersonalIngredientModel> findByUserId(long userId);
+    List<PersonalIngredientModel> findByUsername(String username);
+    PersonalIngredientModel findById(long id);
 }

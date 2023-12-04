@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import axios, { all } from "axios";
+import AlternativeProduct from "../components/AlternativeProduct";
 
 function ResultScreen() {
     const [productName, setProductName] = useState("");
@@ -46,7 +47,13 @@ function ResultScreen() {
     }
 
     const getFlaggedIngredients = () => {
-        axios.get("http://localhost:8080/api/ingredients/all").then((response) => {
+        const config = {
+            headers: {
+                Authorization: `Bearer ${"eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIyIiwiaWF0IjoxNzAxNzAyNzcxLCJleHAiOjE3MDE3ODkxNzF9.3ge_A0xWYzeyghVKz4LNHeptF-SYnSK8KeE_GfaGs_Q"}`
+            }
+        };
+
+        axios.get("http://localhost:8080/api/ingredients/all", config).then((response) => {
             const ingredients = response.data;
             let ingredientArr = [];
             let flaggedToRefTemp = {};
@@ -162,7 +169,7 @@ function ResultScreen() {
                         }
                         
                         { ingredientList.length !== 0 &&
-                            <p className="fs-5 text-body-secondary mb-5">
+                            <p className="fs-5 text-body-secondary mb-4">
                                 Allergens: { allergenList.map((allergen, i) => {
                                     return (
                                         <span key={allergen}>
@@ -175,8 +182,10 @@ function ResultScreen() {
                         }
 
                         <a href={`https://world.openfoodfacts.org/product/${upc}`} target="_blank" rel="noopener noreferrer">
-                            <button className="btn btn-success">See more</button>
+                            <button className="btn btn-success mb-5">See more</button>
                         </a>
+                        <h4 class="mb-3">Alternative products:</h4>
+                        <AlternativeProduct upc="044000050986" />
                     </div>
                 </div>
                 }
