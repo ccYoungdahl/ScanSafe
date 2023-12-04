@@ -7,7 +7,7 @@ function Scanner() {
 
     const navigate = useNavigate();
 
-    useEffect(() => {
+    useEffect(()    => {
         const scanner = new Html5QrcodeScanner("reader", {
         qrbox: {
             width: 500,
