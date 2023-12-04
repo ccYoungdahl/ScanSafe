@@ -8,10 +8,15 @@ import AlternativeProductForm from "./Screens/AlternativeProductForm";
 import ProposedIngredientForm from './Screens/ProposedIngredientForm';
 import UpdateAlternativeProduct from './Screens/UpdateAlternativeProduct';
 import UpdateProposedIngredient from './Screens/UpdateProposedIngredient';
-
+import Login from './Screens/Login';
+import Register from './Screens/Register';
+import Profile from "./Screens/Profile";
 import Navbar from "./components/Navbar";
+import AuthService from "./Services/AuthService";
+import {useEffect, useState} from "react";
 
 function App() {
+
   return (
     <Router>
       <Navbar />
