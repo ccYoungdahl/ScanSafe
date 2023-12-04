@@ -1,5 +1,31 @@
+import {useEffect, useState} from "react";
+import AuthService from "../Services/AuthService";
+
 function Navbar() {
+
+    /*
+    These functions currently do not link anywhere and neede to be updated to show the
+    actual content
+     */
+    const [showInfluencerBoard, setShowInfluencerBoard] = useState(false);
+    const [showAdminBoard, setShowAdminBoard] = useState(false);
+    const [currentUser, setCurrentUser] = useState(undefined);
+
+    useEffect(() => {
+        const user = AuthService.getCurrentUser();
+
+        if (user) {
+            setCurrentUser(user);
+            setShowInfluencerBoard(user.roles.includes("ROLE_INFLUENCER"));
+            setShowAdminBoard(user.roles.includes("ROLE_ADMIN"));
+        }
+    }, []);
+
+    const logOut = () => {
+        AuthService.logout();
+    };
     return (
+        <div>
         <nav className="navbar navbar-expand-lg px-4 navbar-light bg-light">
             <a className="navbar-brand d-flex flex-row align-items-center" href="/">
                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-upc-scan" viewBox="0 0 16 16" style={{transform: "translateY(-3.5px)"}}>
@@ -18,9 +44,11 @@ function Navbar() {
                 <li className="nav-item">
                     <a className="nav-link" href="/your-ingredients">Your ingredients</a>
                 </li>
+
             </ul>
             </div>
         </nav>
+        </div>
     );
 }
 
