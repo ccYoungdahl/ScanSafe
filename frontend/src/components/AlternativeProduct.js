@@ -7,7 +7,6 @@ function AlternativeProduct({ upc }) {
 
     const getProductInfo = () => {
         axios.get(`https://world.openfoodfacts.org/api/v2/product/${upc}.json`).then(response => {
-            console.log(response);
             setProductName(response.data.product.product_name);
             if (response.data.product.selected_images !== null && response.data.product.selected_images.front) {
                 setImageUrl(response.data.product.selected_images.front.display.en);
@@ -29,8 +28,7 @@ function AlternativeProduct({ upc }) {
                 <div className="bg-secondary-subtle mx-auto mt-3" style={{width: "225px", height: "100px"}}></div>
             }
             <div className="card-body">
-                <h5 className="card-title">{productName}</h5>
-                <p class="card-text">Recommended by: auser</p>
+                <h5 className="card-title mb-4">{productName}</h5>
                 <a href={`/product/${upc}`} target="_blank" rel="noopener noreferrer" className="btn btn-success">See ingredients</a>
             </div>
         </div>

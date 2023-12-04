@@ -52,7 +52,6 @@ public class PersonalIngredientController {
         PersonalIngredientModel ingredient = personalIngredientRepo.getById(id);
 
         if (!ingredient.getUsername().equals(username)) {
-            System.out.println("why!!");
             return ResponseEntity.badRequest().body((new MessageResponse("ingredient not deleted. does not belong to calling user.")));
         }
 
