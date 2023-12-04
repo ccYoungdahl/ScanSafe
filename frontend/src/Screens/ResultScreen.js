@@ -13,6 +13,7 @@ function ResultScreen() {
     const [personalIngredients, setPersonalIngredients] = useState([]);
     const [openFoodError, setOpenFoodError] = useState(false);
     const [flaggedError, setFlaggedError] = useState(false);
+    const [alternativeProducts, setAlternativeProducts] = useState([]);
 
     let { upc } = useParams();
     const navigate = useNavigate();
@@ -71,7 +72,13 @@ function ResultScreen() {
     }
 
     function getPersonalIngredients() {
-        axios.get("http://localhost:8080/api/personal-ingredients/all-from-user").then(response => {
+        const config = {
+            headers: {
+                Authorization: `Bearer ${"eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIyIiwiaWF0IjoxNzAxNzAyNzcxLCJleHAiOjE3MDE3ODkxNzF9.3ge_A0xWYzeyghVKz4LNHeptF-SYnSK8KeE_GfaGs_Q"}`
+            }
+        };
+
+        axios.get("http://localhost:8080/api/personal-ingredients/all-from-user", config).then(response => {
             const ingredients = response.data;
             let ingredientArr = [];
             ingredients.forEach((ingredient, _) => {
@@ -83,10 +90,31 @@ function ResultScreen() {
         })
     }
 
+    function getAlternativeProducts() {
+        const config = {
+            headers: {
+                Authorization: `Bearer ${"eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIyIiwiaWF0IjoxNzAxNzAyNzcxLCJleHAiOjE3MDE3ODkxNzF9.3ge_A0xWYzeyghVKz4LNHeptF-SYnSK8KeE_GfaGs_Q"}`
+            }
+        };
+
+        axios.get("http://localhost:8080/api/alternativeProducts/" + upc, config).then(response => {
+            const alternatives = response.data;
+            let alternativeArr = [];
+            alternatives.forEach((alternative, _) => {
+                alternativeArr.push(alternative.altProduct);
+            })
+            setAlternativeProducts(alternativeArr);
+            console.log(alternativeArr);
+        }).catch(error => {
+            console.log(error);
+        })
+    }
+
     useEffect(() => {
         getProductInfo();
         getFlaggedIngredients();
         getPersonalIngredients();
+        getAlternativeProducts();
     }, [navigate]);
 
     return (
@@ -145,7 +173,7 @@ function ResultScreen() {
                                 return (
                                     (flagged || personallyFlagged) ?
                                         <span>
-                                            <a href={flagged ? reference : "/personal-ingredients"} target="_blank" rel="noopener noreferrer">
+                                            <a href={flagged ? reference : "/your-ingredients"} target="_blank" rel="noopener noreferrer">
                                                 <span key={ingredient} className="text-danger text-decoration-underline">
                                                     { ingredient.toLowerCase() }
                                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-box-arrow-up-right ms-1" viewBox="0 0 16 16">
@@ -184,8 +212,17 @@ function ResultScreen() {
                         <a href={`https://world.openfoodfacts.org/product/${upc}`} target="_blank" rel="noopener noreferrer">
                             <button className="btn btn-success mb-5">See more</button>
                         </a>
-                        <h4 class="mb-3">Alternative products:</h4>
-                        <AlternativeProduct upc="044000050986" />
+                        { alternativeProducts.length !== 0 &&
+                            <div>
+                                <h4 class="mb-3">Alternative products:</h4>
+                                { alternativeProducts.map((alternative, i) => {
+                                    console.log(upc);
+                                    return (
+                                        <AlternativeProduct upc={alternative} />
+                                    )
+                                })}
+                            </div>
+                        }
                     </div>
                 </div>
                 }
