@@ -7,10 +7,15 @@ function YourIngredientsScreen() {
 
     function addIngredient(e) {
         e.preventDefault();
+        const config = {
+            headers: {
+                Authorization: `Bearer ${"eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIyIiwiaWF0IjoxNzAxNzAyNzcxLCJleHAiOjE3MDE3ODkxNzF9.3ge_A0xWYzeyghVKz4LNHeptF-SYnSK8KeE_GfaGs_Q"}`
+            }
+        };
+
         axios.post("http://localhost:8080/api/personal-ingredients/save", {
-            name: newIngredient,
-            userId: 1
-        }).then(response => {
+            name: newIngredient
+        }, config).then(response => {
             console.log(response);
             window.location.reload(false);
         }).catch(error => {
@@ -19,7 +24,13 @@ function YourIngredientsScreen() {
     }
 
     function getIngredients() {
-        axios.get("http://localhost:8080/api/personal-ingredients/all-from-user").then(response => {
+        const config = {
+            headers: {
+                Authorization: `Bearer ${"eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIyIiwiaWF0IjoxNzAxNzAyNzcxLCJleHAiOjE3MDE3ODkxNzF9.3ge_A0xWYzeyghVKz4LNHeptF-SYnSK8KeE_GfaGs_Q"}`
+            }
+        };
+
+        axios.get("http://localhost:8080/api/personal-ingredients/all-from-user", config).then(response => {
             setIngredients(response.data);
         }).catch(error => {
             console.log(error);
@@ -27,7 +38,13 @@ function YourIngredientsScreen() {
     }
 
     function deleteIngredient(ingredient) {
-        axios.delete("http://localhost:8080/api/personal-ingredients/delete/" + ingredient.id).then(response => {
+        const config = {
+            headers: {
+                Authorization: `Bearer ${"eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIyIiwiaWF0IjoxNzAxNzAyNzcxLCJleHAiOjE3MDE3ODkxNzF9.3ge_A0xWYzeyghVKz4LNHeptF-SYnSK8KeE_GfaGs_Q"}`
+            }
+        };
+
+        axios.delete("http://localhost:8080/api/personal-ingredients/delete/" + ingredient.id, config).then(response => {
             console.log(response);
             window.location.reload(false);
         }).catch(error => {

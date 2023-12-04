@@ -15,6 +15,9 @@ public class PersonalIngredientModel {
     @Column
     private long userId;
 
+    @Column
+    private String username;
+
     public long getId() {
         return id;
     }
@@ -25,5 +28,13 @@ public class PersonalIngredientModel {
 
     public long getUserId() {
         return userId;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String _username) {
+        username = _username;
     }
 }
