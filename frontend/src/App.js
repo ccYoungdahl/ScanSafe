@@ -3,10 +3,20 @@ import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import ScanScreen from "./Screens/ScanScreen";
 import ResultScreen from "./Screens/ResultScreen";
 import YourIngredientsScreen from "./Screens/YourIngredientsScreen";
-
+import InfluencerDashboard from "./Screens/InfluencerDashboard";
+import AlternativeProductForm from "./Screens/AlternativeProductForm";
+import ProposedIngredientForm from './Screens/ProposedIngredientForm';
+import UpdateAlternativeProduct from './Screens/UpdateAlternativeProduct';
+import UpdateProposedIngredient from './Screens/UpdateProposedIngredient';
+import Login from './Screens/Login';
+import Register from './Screens/Register';
+import Profile from "./Screens/Profile";
 import Navbar from "./components/Navbar";
+import AuthService from "./Services/AuthService";
+import {useEffect, useState} from "react";
 
 function App() {
+
   return (
     <Router>
       <Navbar />
@@ -16,6 +26,13 @@ function App() {
           <Route path=":upc" element={<ResultScreen />} />
         </Route>
         <Route path="/your-ingredients" element={<YourIngredientsScreen />} />
+        <Route path="InfluencerDashboard" element={<InfluencerDashboard />} />
+        <Route path="AlternativeProductForm" element={<AlternativeProductForm />} />
+        <Route path="ProposedIngredientForm" element={<ProposedIngredientForm />} />
+        <Route path="UpdateAlternativeProduct/:id" element={<UpdateAlternativeProduct />} />
+        <Route path="UpdateProposedIngredient/:id" element={<UpdateProposedIngredient /> } />
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
       </Routes>
     </Router>
   );
