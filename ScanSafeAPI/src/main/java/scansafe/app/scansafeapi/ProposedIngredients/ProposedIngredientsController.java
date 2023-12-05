@@ -57,7 +57,8 @@ public class ProposedIngredientsController {
         ProposedIngredients proposedIngredients = proposedIngredientsRepo.findById(id).orElseThrow(() -> new RuntimeException("Error: Proposal is not found."));
         proposedIngredients.setApproved(true);
         proposedIngredientsRepo.save(proposedIngredients);
-        return ResponseEntity.ok(new MessageResponse("approved"))
+        return ResponseEntity.ok(new MessageResponse("approved"));
+    }
     
     @DeleteMapping("/delete/{id}")
     @PreAuthorize("hasRole('USER') or hasRole('INFLUENCER') or hasRole('ADMIN')")

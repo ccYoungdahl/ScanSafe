@@ -28,7 +28,7 @@ public class AlternativeProductsController {
     private String jwtSecret;
         
     @GetMapping("/all")
-    @PreAuthorize("hasRole('INFLUENCER')")
+    @PreAuthorize("hasRole('INFLUENCER') or hasRole('ADMIN')")
     public List<AlternativeProducts> getAllAlternativeProducts(@RequestHeader("Authorization") String token) {
         String username = getUserNameFromJwtToken(token.substring(7, token.length()));
         return alternativeProductRepo.findByUsername(username);
@@ -48,12 +48,12 @@ public class AlternativeProductsController {
         alternativeProduct.setUsername(username);
         return alternativeProductRepo.save(alternativeProduct);
     }
-    @DeleteMapping("/delete/{id}")
-    public ResponseEntity<?> deleteProduct(@PathVariable("id") Long id) {
-        AlternativeProducts alt = alternativeProductRepo.findById(id).orElseThrow(() -> new RuntimeException("Error: Product is not found."));
-        alternativeProductRepo.deleteById(id);
-        return ResponseEntity.ok(new MessageResponse("deleted"));
-    }
+//    @DeleteMapping("/delete/{id}")
+//    public ResponseEntity<?> deleteProduct(@PathVariable("id") Long id) {
+//        AlternativeProducts alt = alternativeProductRepo.findById(id).orElseThrow(() -> new RuntimeException("Error: Product is not found."));
+//        alternativeProductRepo.deleteById(id);
+//        return ResponseEntity.ok(new MessageResponse("deleted"));
+//    }
     
     @DeleteMapping("/delete/{id}")
     @PreAuthorize("hasRole('USER') or hasRole('INFLUENCER') or hasRole('ADMIN')")
