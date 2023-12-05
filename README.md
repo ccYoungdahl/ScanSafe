@@ -17,8 +17,8 @@ allow them to make curated lists of products for other users to enjoy.
 
 # Grading
 
-We've included a .sql file to use with the project. There's already a user of
-each type in the database to help with testing.
+We've included a .sql file to use with the project called STARTING_POINT.sql. 
+There's already a user of each type in the database to help with testing.
 
 Base user:
   - username: jackson
