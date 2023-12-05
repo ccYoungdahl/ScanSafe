@@ -61,7 +61,13 @@ function Navbar() {
                 { role === "admin" &&
                     <ul className="navbar-nav me-auto mb-2 mb-lg-0 ml-auto">
                         <li className="nav-item">
-                            <a className="nav-link" href="/admin">Dashboard</a>
+                            <a className="nav-link" href="/admin">Users</a>
+                        </li>
+                        <li className="nav-item">
+                            <a className="nav-link" href="/Proposals">Proposals</a>
+                        </li>
+                        <li className="nav-item">
+                            <a className="nav-link" href="/Pizzatime">Product Lists</a>
                         </li>
                     </ul>
                 }

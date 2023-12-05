@@ -2,12 +2,9 @@ package scansafe.app.scansafeapi.ProposedIngredients;
 
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+import scansafe.app.scansafeapi.User.response.MessageResponse;
 
 /**
  *
@@ -29,5 +26,12 @@ public class ProposedIngredientsController {
     @PostMapping("/save")
     public ProposedIngredients saveProposedIngredient(@RequestBody ProposedIngredients proposedIngredient) {
         return proposedIngredientsRepo.save(proposedIngredient);
+    }
+    @PutMapping("/approve/{id}")
+    public ResponseEntity<?> Approve(@PathVariable("id") Long id) {
+        ProposedIngredients proposedIngredients = proposedIngredientsRepo.findById(id).orElseThrow(() -> new RuntimeException("Error: Proposal is not found."));
+        proposedIngredients.setApproved(true);
+        proposedIngredientsRepo.save(proposedIngredients);
+        return ResponseEntity.ok(new MessageResponse("approved"));
     }
 }

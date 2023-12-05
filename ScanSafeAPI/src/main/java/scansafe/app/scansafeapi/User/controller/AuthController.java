@@ -1,8 +1,14 @@
 package scansafe.app.scansafeapi.User.controller;
 
 
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.io.Decoders;
+import io.jsonwebtoken.security.Keys;
 import jakarta.validation.Valid;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import scansafe.app.scansafeapi.PersonalIngredient.PersonalIngredientModel;
 import scansafe.app.scansafeapi.Role.ERole;
 import scansafe.app.scansafeapi.Role.Role;
 import scansafe.app.scansafeapi.Role.RoleRepository;
@@ -23,12 +29,14 @@ import scansafe.app.scansafeapi.User.services.UserDetails;
 import scansafe.app.scansafeapi.User.User;
 
 
+import java.security.Key;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-@CrossOrigin(origins = "*", maxAge = 3600)
+@CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/api/auth")
 public class AuthController {
@@ -48,8 +56,11 @@ public class AuthController {
     @Autowired
     JwtUtils jwtUtils;
 
+    @Value("${scansafe.app.jwtSecret}")
+    private String jwtSecret;
+
     @PostMapping("/signin")
-    public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginDto loginDto){
+    public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginDto loginDto) {
         Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
                 loginDto.getUsername(), loginDto.getPassword()));
 
@@ -68,17 +79,17 @@ public class AuthController {
     }
 
     @PostMapping("/signup")
-    public ResponseEntity<?> registerUser(@Valid @RequestBody SignUpDto signUpDto){
+    public ResponseEntity<?> registerUser(@Valid @RequestBody SignUpDto signUpDto) {
 
         // add check for username exists in a DB
-        if(userRepository.existsByUsername(signUpDto.getUsername())){
+        if (userRepository.existsByUsername(signUpDto.getUsername())) {
             return ResponseEntity
                     .badRequest()
                     .body(new MessageResponse("Error: Username is already taken!"));
         }
 
         // add check for email exists in DB
-        if(userRepository.existsByEmail(signUpDto.getEmail())){
+        if (userRepository.existsByEmail(signUpDto.getEmail())) {
             return ResponseEntity
                     .badRequest()
                     .body(new MessageResponse("Error: Email is already in use!"));
@@ -126,5 +137,44 @@ public class AuthController {
 
         return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
 
+
     }
+
+    @GetMapping("/all")
+    public List<scansafe.app.scansafeapi.User.User> getUsers() {
+        return userRepository.findAll();
+    }
+
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<?> deleteUser(@PathVariable("id") Long id) {
+        List<Role> role = roleRepository.findAll();
+        User deleted = userRepository.findById(id).orElseThrow(() -> new RuntimeException("Error: User is not found."));;
+            deleted.getRoles().removeAll(deleted.getRoles());
+            userRepository.deleteById(id);
+
+
+        return ResponseEntity.ok(new MessageResponse("user banned"));
+    }
+    @PutMapping("/toInfluencer/{id}")
+    public ResponseEntity<?> makeInfluencer(@PathVariable("id") Long id) {
+        User user = userRepository.findById(id).orElseThrow(() -> new RuntimeException("Error: User is not found."));
+        Role role = roleRepository.findByName(ERole.ROLE_INFLUENCER).orElseThrow(() -> new RuntimeException("Error: User is not found."));
+        Set<Role> roles = new HashSet<>();
+        roles.add(role);
+        user.setRoles(roles);
+        userRepository.save(user);
+        return ResponseEntity.ok(new MessageResponse("user updated"));
+    }
+    @PutMapping("/toBase/{id}")
+    public ResponseEntity<?> makeBase(@PathVariable("id") Long id) {
+        User user = userRepository.findById(id).orElseThrow(() -> new RuntimeException("Error: User is not found."));
+        Role role = roleRepository.findByName(ERole.ROLE_USER).orElseThrow(() -> new RuntimeException("Error: User is not found."));
+        Set<Role> roles = new HashSet<>();
+        roles.add(role);
+        user.setRoles(roles);
+        userRepository.save(user);
+        return ResponseEntity.ok(new MessageResponse("user updated"));
+    }
+
+
 }

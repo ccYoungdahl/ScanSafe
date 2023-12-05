@@ -7,6 +7,7 @@ import lombok.Data;
 import jakarta.persistence.*;
 
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 
 @Data
@@ -31,5 +32,8 @@ public class User {
             inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
     private Set<Role> roles = new HashSet<>();
 
+   // public void remove_association( user) {
+    //    user.getRoles().remove(roles);
+  //  };
 
 }

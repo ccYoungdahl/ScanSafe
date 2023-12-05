@@ -3,8 +3,10 @@ package scansafe.app.scansafeapi.AlternativeProducts;
 import java.util.List;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import scansafe.app.scansafeapi.User.response.MessageResponse;
 
 /**
  *
@@ -12,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
  */
 @RestController
 @RequestMapping("/api/alternativeProducts")
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin(origins = "*")
 public class AlternativeProductsController {
     
     @Autowired
@@ -32,6 +34,12 @@ public class AlternativeProductsController {
     @PostMapping("/save")
     public AlternativeProducts saveAlternativeProducts(@RequestBody AlternativeProducts alternativeProduct) {
         return alternativeProductRepo.save(alternativeProduct);
+    }
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<?> deleteProduct(@PathVariable("id") Long id) {
+        AlternativeProducts alt = alternativeProductRepo.findById(id).orElseThrow(() -> new RuntimeException("Error: Product is not found."));
+        alternativeProductRepo.deleteById(id);
+        return ResponseEntity.ok(new MessageResponse("deleted"));
     }
     
 }
