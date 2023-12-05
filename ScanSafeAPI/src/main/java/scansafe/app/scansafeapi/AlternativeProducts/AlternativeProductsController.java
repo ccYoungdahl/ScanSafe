@@ -6,7 +6,9 @@ import io.jsonwebtoken.security.Keys;
 import java.security.Key;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.beans.factory.annotation.Value;
+
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -35,6 +37,12 @@ public class AlternativeProductsController {
     @GetMapping("/{upc}")
     @PreAuthorize("hasRole('USER') or hasRole('INFLUENCER') or hasRole('ADMIN')")
     public List<AlternativeProducts> getAlternativeProductsFromUPC(@PathVariable("upc") String upc, @RequestHeader("Authorization") String token) {
+        return alternativeProductRepo.findByUpc(upc);
+    }
+
+    @GetMapping("/{upc}")
+    @PreAuthorize("hasRole('USER') or hasRole('INFLUENCER') or hasRole('ADMIN')")
+    public List<AlternativeProducts> getAlternativeProductsFromUPC(@PathVariable("upc") String upc) {
         return alternativeProductRepo.findByUpc(upc);
     }
     

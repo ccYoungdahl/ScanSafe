@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import InfluencerService from '../Services/InfluencerService'
 import AuthService from "../Services/AuthService";
+
 import axios from "axios";
 
 function InfluencerDashboard() {
@@ -47,6 +48,7 @@ function InfluencerDashboard() {
             })
         }
     }
+
     function handleRedirects() {
         const user = AuthService.getCurrentUser();
         if (user) {
@@ -61,6 +63,7 @@ function InfluencerDashboard() {
             navigate("/login")
         }
     }
+
 
     function deleteAlternativeProduct(e, id) {
         e.preventDefault();
@@ -101,6 +104,7 @@ function InfluencerDashboard() {
     }
 
 
+
     useEffect(() => {
            /*
         const fetchData = async () => {
@@ -115,10 +119,15 @@ function InfluencerDashboard() {
             }
             setLoading(false);
         };
+
         fetchData();
         */
         getAlternativeProducts();
         getProposedIngredients();
+
+
+        fetchData();
+
         handleRedirects();
     }, []);
 
