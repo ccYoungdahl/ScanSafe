@@ -2,9 +2,9 @@
   "ExpandedNodes": [
     "",
     "\\src",
-    "\\src\\components",
     "\\src\\Screens",
     "\\src\\Services"
   ],
+  "SelectedNode": "\\src\\Screens\\UpdateAlternativeProduct.js",
   "PreviewInSolutionExplorer": false
 }

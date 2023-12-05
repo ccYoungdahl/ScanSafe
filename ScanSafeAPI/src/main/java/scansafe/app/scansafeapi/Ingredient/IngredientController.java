@@ -32,4 +32,18 @@ public class IngredientController {
         ingredientRepo.save(ingredient);
         return "ingredient saved";
     }
+    
+    @CrossOrigin
+    @GetMapping("/findByName/{name}")
+    @PreAuthorize("hasRole('INFLUENCER')")
+    public boolean getIngredientByName(@PathVariable String name) {
+        if (ingredientRepo.findByName(name) != null) {
+            if (name.toLowerCase().equals(ingredientRepo.findByName(name).getName().toLowerCase())) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+        return false;
+    }
 }
