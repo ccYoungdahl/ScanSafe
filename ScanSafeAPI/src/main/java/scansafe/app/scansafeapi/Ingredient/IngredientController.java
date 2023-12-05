@@ -33,7 +33,7 @@ public class IngredientController {
         return "ingredient saved";
     }
     
-        @CrossOrigin
+    @CrossOrigin
     @GetMapping("/findByName/{name}")
     @PreAuthorize("hasRole('INFLUENCER')")
     public boolean getIngredientByName(@PathVariable String name) {

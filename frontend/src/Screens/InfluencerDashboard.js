@@ -2,8 +2,9 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import InfluencerService from '../Services/InfluencerService'
 import AuthService from "../Services/AuthService";
+import axios from "axios";
 
-const InfluencerDashboard = () => {
+function InfluencerDashboard() {
 
     const navigate = useNavigate();
 
@@ -11,6 +12,41 @@ const InfluencerDashboard = () => {
     const [alternativeProducts, setAlternativeProducts] = useState([]);
     const [proposedIngredients, setProposedIngredients] = useState([]);
 
+    function getAlternativeProducts() {
+        const user = AuthService.getCurrentUser();
+        if (user) {
+            const token = user.accessToken;
+            const config = {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            };
+
+            axios.get("http://localhost:8080/api/alternativeProducts/all", config).then(response => {
+                setAlternativeProducts(response.data);
+            }).catch(error => {
+                console.log(error);
+            })
+        }
+    }
+
+    function getProposedIngredients() {
+        const user = AuthService.getCurrentUser();
+        if (user) {
+            const token = user.accessToken;
+            const config = {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            };
+
+            axios.get("http://localhost:8080/api/proposedIngredients/all", config).then(response => {
+                setProposedIngredients(response.data);
+            }).catch(error => {
+                console.log(error);
+            })
+        }
+    }
     function handleRedirects() {
         const user = AuthService.getCurrentUser();
         if (user) {
@@ -26,7 +62,47 @@ const InfluencerDashboard = () => {
         }
     }
 
+    function deleteAlternativeProduct(e, id) {
+        e.preventDefault();
+        const user = AuthService.getCurrentUser();
+        if (user) {
+            const token = user.accessToken;
+            const config = {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            };
+            axios.delete(`http://localhost:8080/api/alternativeProducts/delete/${id}`, config).then(response => {
+                console.log(response);
+                window.location.reload(false);
+            }).catch(error => {
+                console.log(error);
+            })
+        }
+    }
+
+    function deleteProposedIngredient(e, id) {
+        e.preventDefault();
+        const user = AuthService.getCurrentUser();
+        if (user) {
+            const token = user.accessToken;
+            const config = {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            };
+            axios.delete(`http://localhost:8080/api/proposedIngredients/delete/${id}`, config).then(response => {
+                console.log(response);
+                window.location.reload(false);
+            }).catch(error => {
+                console.log(error);
+            })
+        }
+    }
+
+
     useEffect(() => {
+           /*
         const fetchData = async () => {
             setLoading(true);
             try {
@@ -39,11 +115,14 @@ const InfluencerDashboard = () => {
             }
             setLoading(false);
         };
-
         fetchData();
+        */
+        getAlternativeProducts();
+        getProposedIngredients();
         handleRedirects();
     }, []);
 
+    /*
     const deleteAlternativeProduct = (e, id) => {
         e.preventDefault();
         InfluencerService.deleteAlternativeProduct(id).then((response) => {
@@ -54,7 +133,7 @@ const InfluencerDashboard = () => {
             }
         });
     };
-
+    
 
     const deleteProposedIngredient = (e, id) => {
         e.preventDefault();
@@ -67,7 +146,7 @@ const InfluencerDashboard = () => {
         })
 
     };
-
+    */
     const editAlternativeProduct = (e, id) => {
         e.preventDefault();
         navigate('/UpdateAlternativeProduct/' + id);
@@ -91,7 +170,7 @@ const InfluencerDashboard = () => {
                         <th style={{ textAlign: 'right' }}><a href='AlternativeProductForm'><button type="button" className="btn btn-success">Create new</button></a></th>
                     </tr>
                 </thead>
-                {!loading && (
+                {alternativeProducts && (
                     <tbody>
                         {alternativeProducts.map((alternativeProduct) => (
                             <tr key={alternativeProduct.id}>
@@ -128,7 +207,7 @@ const InfluencerDashboard = () => {
                         <th></th>
                     </tr>
                 </thead>
-                {!loading && (
+                {proposedIngredients && (
                     <tbody>
                         {proposedIngredients.map((proposedIngredient) => (
                        <tr key={proposedIngredient.id}>
