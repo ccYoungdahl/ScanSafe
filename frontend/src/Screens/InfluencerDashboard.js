@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import InfluencerService from '../Services/InfluencerService'
+import AuthService from "../Services/AuthService";
 
 const InfluencerDashboard = () => {
 
@@ -9,6 +10,21 @@ const InfluencerDashboard = () => {
     const [loading, setLoading] = useState(true);
     const [alternativeProducts, setAlternativeProducts] = useState([]);
     const [proposedIngredients, setProposedIngredients] = useState([]);
+
+    function handleRedirects() {
+        const user = AuthService.getCurrentUser();
+        if (user) {
+            const roles = user.roles;
+            if (roles.includes("ROLE_USER")) {
+                navigate("/");
+            }
+            if (roles.includes("ROLE_ADMIN")) {
+                navigate("/admin");
+            }
+        } else {
+            navigate("/login")
+        }
+    }
 
     useEffect(() => {
         const fetchData = async () => {
@@ -24,7 +40,8 @@ const InfluencerDashboard = () => {
             setLoading(false);
         };
 
-        fetchData();    
+        fetchData();
+        handleRedirects();
     }, []);
 
     const deleteAlternativeProduct = (e, id) => {

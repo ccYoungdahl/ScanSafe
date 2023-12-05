@@ -31,6 +31,8 @@ function App() {
         <Route path="ProposedIngredientForm" element={<ProposedIngredientForm />} />
         <Route path="UpdateAlternativeProduct/:id" element={<UpdateAlternativeProduct />} />
         <Route path="UpdateProposedIngredient/:id" element={<UpdateProposedIngredient /> } />
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
       </Routes>
     </Router>
   );

@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import axios, { all } from "axios";
 import AlternativeProduct from "../components/AlternativeProduct";
+import AuthService from "../Services/AuthService";
 
 function ResultScreen() {
     const [productName, setProductName] = useState("");
@@ -48,66 +49,93 @@ function ResultScreen() {
     }
 
     const getFlaggedIngredients = () => {
-        const config = {
-            headers: {
-                Authorization: `Bearer ${"eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIyIiwiaWF0IjoxNzAxNzAyNzcxLCJleHAiOjE3MDE3ODkxNzF9.3ge_A0xWYzeyghVKz4LNHeptF-SYnSK8KeE_GfaGs_Q"}`
-            }
-        };
-
-        axios.get("http://localhost:8080/api/ingredients/all", config).then((response) => {
-            const ingredients = response.data;
-            let ingredientArr = [];
-            let flaggedToRefTemp = {};
-            ingredients.forEach((ingredient, _) => {
-                if (ingredient.name !== null) {
-                    flaggedToRefTemp[ingredient.name] = ingredient.reference;
-                    ingredientArr.push(ingredient.name.toLowerCase());
+        const user = AuthService.getCurrentUser();
+        if (user) {
+            const token = user.accessToken;
+            const config = {
+                headers: {
+                    Authorization: `Bearer ${token}`
                 }
-            });
-            setFlaggedToRef(flaggedToRefTemp);
-            setFlaggedIngredientList(ingredientArr);
-        }).catch(error => {
-            setFlaggedError(true);
-        })
+            };
+
+            axios.get("http://localhost:8080/api/ingredients/all", config).then((response) => {
+                const ingredients = response.data;
+                let ingredientArr = [];
+                let flaggedToRefTemp = {};
+                ingredients.forEach((ingredient, _) => {
+                    if (ingredient.name !== null) {
+                        flaggedToRefTemp[ingredient.name] = ingredient.reference;
+                        ingredientArr.push(ingredient.name.toLowerCase());
+                    }
+                });
+                setFlaggedToRef(flaggedToRefTemp);
+                setFlaggedIngredientList(ingredientArr);
+            }).catch(error => {
+                setFlaggedError(true);
+            })
+        }
     }
 
     function getPersonalIngredients() {
-        const config = {
-            headers: {
-                Authorization: `Bearer ${"eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIyIiwiaWF0IjoxNzAxNzAyNzcxLCJleHAiOjE3MDE3ODkxNzF9.3ge_A0xWYzeyghVKz4LNHeptF-SYnSK8KeE_GfaGs_Q"}`
-            }
-        };
+        const user = AuthService.getCurrentUser();
+        if (user) {
+            const token = user.accessToken;
+            const config = {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            };
 
-        axios.get("http://localhost:8080/api/personal-ingredients/all-from-user", config).then(response => {
-            const ingredients = response.data;
-            let ingredientArr = [];
-            ingredients.forEach((ingredient, _) => {
-                ingredientArr.push(ingredient.name);
-            });
-            setPersonalIngredients(ingredientArr);
-        }).catch(error => {
-            console.log(error);
-        })
+            axios.get("http://localhost:8080/api/personal-ingredients/all-from-user", config).then(response => {
+                const ingredients = response.data;
+                let ingredientArr = [];
+                ingredients.forEach((ingredient, _) => {
+                    ingredientArr.push(ingredient.name);
+                });
+                setPersonalIngredients(ingredientArr);
+            }).catch(error => {
+                console.log(error);
+            })
+        }
     }
 
     function getAlternativeProducts() {
-        const config = {
-            headers: {
-                Authorization: `Bearer ${"eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIyIiwiaWF0IjoxNzAxNzAyNzcxLCJleHAiOjE3MDE3ODkxNzF9.3ge_A0xWYzeyghVKz4LNHeptF-SYnSK8KeE_GfaGs_Q"}`
-            }
-        };
+        const user = AuthService.getCurrentUser();
+        if (user) {
+            const token = user.accessToken;
+            const config = {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            };
 
-        axios.get("http://localhost:8080/api/alternativeProducts/" + upc, config).then(response => {
-            const alternatives = response.data;
-            let alternativeArr = [];
-            alternatives.forEach((alternative, _) => {
-                alternativeArr.push(alternative.altProduct);
+            axios.get("http://localhost:8080/api/alternativeProducts/" + upc, config).then(response => {
+                const alternatives = response.data;
+                let alternativeArr = [];
+                alternatives.forEach((alternative, _) => {
+                    alternativeArr.push(alternative.altProduct);
+                })
+                setAlternativeProducts(alternativeArr);
+                console.log(alternativeArr);
+            }).catch(error => {
+                console.log(error);
             })
-            setAlternativeProducts(alternativeArr);
-            console.log(alternativeArr);
-        }).catch(error => {
-            console.log(error);
-        })
+        }
+    }
+
+    function handleRedirects() {
+        const user = AuthService.getCurrentUser();
+        if (user) {
+            const roles = user.roles;
+            if (roles.includes("ROLE_INFLUENCER")) {
+                navigate("/InfluencerDashboard");
+            }
+            if (roles.includes("ROLE_ADMIN")) {
+                navigate("/admin");
+            }
+        } else {
+            navigate("/login")
+        }
     }
 
     useEffect(() => {
@@ -115,6 +143,7 @@ function ResultScreen() {
         getFlaggedIngredients();
         getPersonalIngredients();
         getAlternativeProducts();
+        handleRedirects();
     }, [navigate]);
 
     return (

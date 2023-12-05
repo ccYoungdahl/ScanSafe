@@ -3,6 +3,7 @@ import Form from "react-validation/build/form";
 import Input from "react-validation/build/input";
 import CheckButton from "react-validation/build/button";
 import { isEmail } from "validator";
+import { useNavigate } from 'react-router-dom';
 
 import AuthService from "../Services/AuthService";
 
@@ -56,6 +57,8 @@ const Register = () => {
     const [successful, setSuccessful] = useState(false);
     const [message, setMessage] = useState("");
 
+    let navigate = useNavigate();
+
     const onChangeUsername = (e) => {
         const username = e.target.value;
         setUsername(username);
@@ -74,30 +77,50 @@ const Register = () => {
     const handleRegister = (e) => {
         e.preventDefault();
 
+        console.log("username: " + username);
+        console.log("email: " + email);
+        console.log("password: " + password);
+
         setMessage("");
         setSuccessful(false);
 
-        form.current.validateAll();
+        AuthService.register(username, email, password).then(response => {
+            setMessage(response.data.message);
+            setSuccessful(true);
+            navigate("/login");
+        }).catch(error => {
+            const resMessage =
+                (error.response &&
+                    error.response.data &&
+                    error.response.data.message) ||
+                error.message ||
+                error.toString();
 
-        if (checkBtn.current.context._errors.length === 0) {
-            AuthService.register(username, email, password).then(
-                (response) => {
-                    setMessage(response.data.message);
-                    setSuccessful(true);
-                },
-                (error) => {
-                    const resMessage =
-                        (error.response &&
-                            error.response.data &&
-                            error.response.data.message) ||
-                        error.message ||
-                        error.toString();
+            setMessage(resMessage);
+            setSuccessful(false);
+        })
 
-                    setMessage(resMessage);
-                    setSuccessful(false);
-                }
-            );
-        }
+        // form.current.validateAll();
+
+        // if (checkBtn.current.context._errors.length === 0) {
+        //     AuthService.register(username, email, password).then(
+        //         (response) => {
+        //             setMessage(response.data.message);
+        //             setSuccessful(true);
+        //         },
+        //         (error) => {
+        //             const resMessage =
+        //                 (error.response &&
+        //                     error.response.data &&
+        //                     error.response.data.message) ||
+        //                 error.message ||
+        //                 error.toString();
+
+        //             setMessage(resMessage);
+        //             setSuccessful(false);
+        //         }
+        //     );
+        // }
     };
 
     return (
@@ -107,9 +130,38 @@ const Register = () => {
                     src="//ssl.gstatic.com/accounts/ui/avatar_2x.png"
                     alt="profile-img"
                     className="profile-img-card"
+                    style={{width: "100px"}}
                 />
 
-                <Form onSubmit={handleRegister} ref={form}>
+                <form onSubmit={handleRegister}>
+                    <div>
+                        <div className="form-group">
+                            <label htmlFor="username">Username</label>
+                            <input type="text" className="form-control" name="username" value={username} onChange={onChangeUsername} />
+                        </div>
+                        <div className="form-group">
+                            <label htmlFor="email">Email</label>
+                            <input type="text" className="form-control" name="email" value={email} onChange={onChangeEmail} />
+                        </div>
+                        <div className="form-group">
+                            <label htmlFor="username">Password</label>
+                            <input type="password" className="form-control" name="password" value={password} onChange={onChangePassword} />
+                        </div>
+                        <button type="submit" className="btn btn-primary btn-block">Sign up</button>
+                    </div>
+                    {message && (
+                        <div className="form-group">
+                            <div
+                                className={ successful ? "alert alert-success" : "alert alert-danger" }
+                                role="alert"
+                            >
+                                {message}
+                            </div>
+                        </div>
+                    )}
+                </form>
+
+                {/* <Form onSubmit={handleRegister} ref={form}>
                     {!successful && (
                         <div>
                             <div className="form-group">
@@ -165,7 +217,7 @@ const Register = () => {
                         </div>
                     )}
                     <CheckButton style={{ display: "none" }} ref={checkBtn} />
-                </Form>
+                </Form> */}
             </div>
         </div>
     );
