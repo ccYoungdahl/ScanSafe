@@ -1,59 +1,92 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from 'react-router-dom';
 import axios from "axios";
+
+import AuthService from "../Services/AuthService";
 
 function YourIngredientsScreen() {
     const [newIngredient, setNewIngredient] = useState("");
     const [ingredients, setIngredients] = useState([]);
 
+    const navigate = useNavigate();
+
     function addIngredient(e) {
         e.preventDefault();
-        const config = {
-            headers: {
-                Authorization: `Bearer ${"eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIyIiwiaWF0IjoxNzAxNzAyNzcxLCJleHAiOjE3MDE3ODkxNzF9.3ge_A0xWYzeyghVKz4LNHeptF-SYnSK8KeE_GfaGs_Q"}`
-            }
-        };
+        const user = AuthService.getCurrentUser();
+        if (user) {
+            const token = user.accessToken;
+            const config = {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            };
 
-        axios.post("http://localhost:8080/api/personal-ingredients/save", {
-            name: newIngredient
-        }, config).then(response => {
-            console.log(response);
-            window.location.reload(false);
-        }).catch(error => {
-            console.log(error);
-        })
+            axios.post("http://localhost:8080/api/personal-ingredients/save", {
+                name: newIngredient
+            }, config).then(response => {
+                console.log(response);
+                window.location.reload(false);
+            }).catch(error => {
+                console.log(error);
+            })
+        }
     }
 
     function getIngredients() {
-        const config = {
-            headers: {
-                Authorization: `Bearer ${"eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIyIiwiaWF0IjoxNzAxNzAyNzcxLCJleHAiOjE3MDE3ODkxNzF9.3ge_A0xWYzeyghVKz4LNHeptF-SYnSK8KeE_GfaGs_Q"}`
-            }
-        };
+        const user = AuthService.getCurrentUser();
+        if (user) {
+            const token = user.accessToken;
+            const config = {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            };
 
-        axios.get("http://localhost:8080/api/personal-ingredients/all-from-user", config).then(response => {
-            setIngredients(response.data);
-        }).catch(error => {
-            console.log(error);
-        })
+            axios.get("http://localhost:8080/api/personal-ingredients/all-from-user", config).then(response => {
+                setIngredients(response.data);
+            }).catch(error => {
+                console.log(error);
+            })
+        }
     }
 
     function deleteIngredient(ingredient) {
-        const config = {
-            headers: {
-                Authorization: `Bearer ${"eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIyIiwiaWF0IjoxNzAxNzAyNzcxLCJleHAiOjE3MDE3ODkxNzF9.3ge_A0xWYzeyghVKz4LNHeptF-SYnSK8KeE_GfaGs_Q"}`
-            }
-        };
+        const user = AuthService.getCurrentUser();
+        if (user) {
+            const token = user.accessToken;
+            const config = {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            };
 
-        axios.delete("http://localhost:8080/api/personal-ingredients/delete/" + ingredient.id, config).then(response => {
-            console.log(response);
-            window.location.reload(false);
-        }).catch(error => {
-            console.log(error);
-        })
+            axios.delete("http://localhost:8080/api/personal-ingredients/delete/" + ingredient.id, config).then(response => {
+                console.log(response);
+                window.location.reload(false);
+            }).catch(error => {
+                console.log(error);
+            })
+        }
+    }
+
+    function handleRedirects() {
+        const user = AuthService.getCurrentUser();
+        if (user) {
+            const roles = user.roles;
+            if (roles.includes("ROLE_INFLUENCER")) {
+                navigate("/InfluencerDashboard");
+            }
+            if (roles.includes("ROLE_ADMIN")) {
+                navigate("/admin");
+            }
+        } else {
+            navigate("/login")
+        }
     }
 
     useEffect(() => {
         getIngredients();
+        handleRedirects();
     }, [])
 
     return (

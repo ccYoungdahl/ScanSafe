@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from 'react-router-dom';
 import InfluencerService from "../Services/InfluencerService";
+import AuthService from "../Services/AuthService";
 
 const UpdateAlternativeProduct = () => {
 
@@ -20,6 +21,16 @@ const UpdateAlternativeProduct = () => {
         setAlternativeProduct({ ...alternativeProduct, [e.target.name]: value });
     };
 
+    function handleRedirects() {
+        const roles = AuthService.getCurrentUser().roles;
+        if (roles.includes("ROLE_USER")) {
+            navigate("/");
+        }
+        if (roles.includes("ROLE_ADMIN")) {
+            navigate("/admin");
+        }
+    }
+
     useEffect(() => {
         const fetchData = async () => {
             try {
@@ -31,6 +42,7 @@ const UpdateAlternativeProduct = () => {
         };
 
         fetchData();
+        handleRedirects();
     }, []);
 
     const updateAlternativeProduct = (e) => {

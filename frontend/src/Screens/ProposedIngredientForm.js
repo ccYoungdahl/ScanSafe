@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import InfluencerService from '../Services/InfluencerService';
+import AuthService from '../Services/AuthService';
 
 const ProposedIngredientForm = () => {
 
@@ -28,6 +29,16 @@ const ProposedIngredientForm = () => {
         navigate('/InfluencerDashboard');
     };
 
+    function handleRedirects() {
+        const roles = AuthService.getCurrentUser().roles;
+        if (roles.includes("ROLE_USER")) {
+            navigate("/");
+        }
+        if (roles.includes("ROLE_ADMIN")) {
+            navigate("/admin");
+        }
+    }
+
     const openModal = (e) => {
         e.preventDefault();
         InfluencerService.checkProposedIngredientWatchlist(proposedIngredient.name).then((response) => {
@@ -40,6 +51,10 @@ const ProposedIngredientForm = () => {
             console.log(error);
         });
     };
+
+    useEffect(() => {
+        handleRedirects();
+    }, [])
 
     return (
         <div className="container pt-5">

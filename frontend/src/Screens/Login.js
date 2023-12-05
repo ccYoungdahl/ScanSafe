@@ -1,6 +1,6 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { useNavigate } from 'react-router-dom';
-import Form from "react-validation/build/form";
+// import Form from "react-validation/build/form";
 import Input from "react-validation/build/input";
 import CheckButton from "react-validation/build/button";
 
@@ -37,36 +37,62 @@ const Login = () => {
         setPassword(password);
     };
 
+    function handleRedirects() {
+        const user = AuthService.getCurrentUser();
+        if (user) {
+            navigate("/");
+        }
+    }
+
     const handleLogin = (e) => {
         e.preventDefault();
 
         setMessage("");
         setLoading(true);
 
-        form.current.validateAll();
+        AuthService.login(username, password).then(response => {
+            navigate("/");
+            window.location.reload(false);
+        }).catch(error => {
+            const resMessage =
+                    (error.response &&
+                        error.response.data &&
+                        error.response.data.message) ||
+                    error.message ||
+                    error.toString();
 
-        if (checkBtn.current.context._errors.length === 0) {
-            AuthService.login(username, password).then(
-                () => {
-                    navigate("/profile");
-                    window.location.reload();
-                },
-                (error) => {
-                    const resMessage =
-                        (error.response &&
-                            error.response.data &&
-                            error.response.data.message) ||
-                        error.message ||
-                        error.toString();
+                setLoading(false);
+                setMessage(resMessage);    
+        })
 
-                    setLoading(false);
-                    setMessage(resMessage);
-                }
-            );
-        } else {
-            setLoading(false);
-        }
+        // form.current.validateAll();
+
+        // if (checkBtn.current.context._errors.length === 0) {
+        //     AuthService.login(username, password).then(
+        //         () => {
+        //             navigate("/profile");
+        //             window.location.reload();
+        //         },
+        //         (error) => {
+        //             const resMessage =
+        //                 (error.response &&
+        //                     error.response.data &&
+        //                     error.response.data.message) ||
+        //                 error.message ||
+        //                 error.toString();
+
+        //             setLoading(false);
+        //             setMessage(resMessage);
+        //         }
+        //     );
+        // } else {
+        //     setLoading(false);
+        // }
     };
+
+    useEffect(() => {
+        handleRedirects();
+    }, [])
 
     return (
         <div className="col-md-12">
@@ -75,9 +101,34 @@ const Login = () => {
                     src="//ssl.gstatic.com/accounts/ui/avatar_2x.png"
                     alt="profile-img"
                     className="profile-img-card"
+                    style={{width: "100px"}}
                 />
 
-                <Form onSubmit={handleLogin} ref={form}>
+                <form onSubmit={handleLogin}>
+                    <div className="form-group">
+                        <label htmlFor="username">Username</label>
+                        <input type="text" className="form-control" name="username" value={username} onChange={onChangeUsername} />
+                    </div>
+                    <div className="form-group">
+                        <label htmlFor="password">Password</label>
+                        <input type="password" className="form-control" name="password" value={password} onChange={onChangePassword} />
+                    </div>
+                    <button type="submit" className="btn btn-primary btn-block" disabled={loading}>
+                        {loading && (
+                            <span className="spinner-border spinner-border-sm me-2"></span>
+                        )}
+                        <span>Login</span>
+                    </button>
+                    {message && (
+                        <div className="form-group">
+                            <div className="alert alert-danger" role="alert">
+                                {message}
+                            </div>
+                        </div>
+                    )}
+                </form>
+
+                {/* <Form onSubmit={handleLogin} ref={form}>
                     <div className="form-group">
                         <label htmlFor="username">Username</label>
                         <Input
@@ -119,7 +170,7 @@ const Login = () => {
                         </div>
                     )}
                     <CheckButton style={{ display: "none" }} ref={checkBtn} />
-                </Form>
+                </Form> */}
             </div>
         </div>
     );

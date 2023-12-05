@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from 'react-router-dom';
 import InfluencerService from "../Services/InfluencerService";
+import AuthService from "../Services/AuthService";
 
 const UpdateProposedIngredient = () => {
 
@@ -21,6 +22,16 @@ const UpdateProposedIngredient = () => {
         setProposedIngredient({ ...proposedIngredient, [e.target.name]: value });
     };
 
+    function handleRedirects() {
+        const roles = AuthService.getCurrentUser().roles;
+        if (roles.includes("ROLE_USER")) {
+            navigate("/");
+        }
+        if (roles.includes("ROLE_ADMIN")) {
+            navigate("/admin");
+        }
+    }
+
     useEffect(() => {
             const fetchData = async () => {
                 try {
@@ -32,6 +43,7 @@ const UpdateProposedIngredient = () => {
         };
 
         fetchData();
+        handleRedirects();
     }, []);
 
     const updateProposedIngredient = (e) => {
