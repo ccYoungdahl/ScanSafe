@@ -70,7 +70,7 @@ const UpdateProposedIngredient = () => {
 
     return (
         <div className="container pt-5">
-            <h1 className="mb-4">New ingredient or additive proposal form</h1>
+            <h1 className="mb-4">Update ingredient or additive proposal</h1>
             <div className="bg-light-subtle p-4">
 
                 <form>

@@ -23,15 +23,17 @@ public class AlternativeProducts {
     private long id;
 
     private long userId;
+    private String username;
     private String altProduct;
     private String replacesProduct;
     private String upc;
     private String notes;
     
-    public AlternativeProducts(String altProduct, String replacesProduct, String upc, String notes) {
+    public AlternativeProducts(String altProduct, String replacesProduct, String upc, String notes, String username) {
         this.altProduct = altProduct;
         this.replacesProduct = replacesProduct;
         this.upc = upc;
         this.notes = notes;
+        this.username = username;
     }
 }

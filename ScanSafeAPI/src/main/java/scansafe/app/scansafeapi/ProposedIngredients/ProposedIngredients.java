@@ -33,15 +33,17 @@ public class ProposedIngredients {
     private String risk;
     private String website;
     private String comments;
+    private String username;
     private boolean approved;
     private boolean rejected;
     
-    public ProposedIngredients(String name, String risk, String website, String comments) {
+    public ProposedIngredients(String name, String risk, String website, String comments, String username) {
         
         this.name = name;
         this.risk = risk;
         this.website =  website;
         this.comments = comments;
+        this.username = username;
         this.approved = false;
         this.rejected = false;
     }

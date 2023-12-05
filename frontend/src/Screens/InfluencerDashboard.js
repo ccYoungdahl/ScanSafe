@@ -3,13 +3,51 @@ import { useNavigate } from "react-router-dom";
 import InfluencerService from '../Services/InfluencerService'
 import AuthService from "../Services/AuthService";
 
-const InfluencerDashboard = () => {
+import axios from "axios";
+
+function InfluencerDashboard() {
 
     const navigate = useNavigate();
 
     const [loading, setLoading] = useState(true);
     const [alternativeProducts, setAlternativeProducts] = useState([]);
     const [proposedIngredients, setProposedIngredients] = useState([]);
+
+    function getAlternativeProducts() {
+        const user = AuthService.getCurrentUser();
+        if (user) {
+            const token = user.accessToken;
+            const config = {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            };
+
+            axios.get("http://localhost:8080/api/alternativeProducts/all", config).then(response => {
+                setAlternativeProducts(response.data);
+            }).catch(error => {
+                console.log(error);
+            })
+        }
+    }
+
+    function getProposedIngredients() {
+        const user = AuthService.getCurrentUser();
+        if (user) {
+            const token = user.accessToken;
+            const config = {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            };
+
+            axios.get("http://localhost:8080/api/proposedIngredients/all", config).then(response => {
+                setProposedIngredients(response.data);
+            }).catch(error => {
+                console.log(error);
+            })
+        }
+    }
 
     function handleRedirects() {
         const user = AuthService.getCurrentUser();
@@ -26,7 +64,46 @@ const InfluencerDashboard = () => {
         }
     }
 
+    function deleteAlternativeProduct(e, id) {
+        e.preventDefault();
+        const user = AuthService.getCurrentUser();
+        if (user) {
+            const token = user.accessToken;
+            const config = {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            };
+            axios.delete("http://localhost:8080/api/alternativeProducts/delete/" + id, config).then(response => {
+                console.log(response);
+                window.location.reload(false);
+            }).catch(error => {
+                console.log(error);
+            })
+        }
+    }
+
+    function deleteProposedIngredient(e, id) {
+        e.preventDefault();
+        const user = AuthService.getCurrentUser();
+        if (user) {
+            const token = user.accessToken;
+            const config = {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            };
+            axios.delete("http://localhost:8080/api/proposedIngredients/delete/" + id, config).then(response => {
+                console.log(response);
+                window.location.reload(false);
+            }).catch(error => {
+                console.log(error);
+            })
+        }
+    }
+
     useEffect(() => {
+          /*
         const fetchData = async () => {
             setLoading(true);
             try {
@@ -41,12 +118,23 @@ const InfluencerDashboard = () => {
         };
 
         fetchData();
+        */
+        getAlternativeProducts();
+        getProposedIngredients();
         handleRedirects();
     }, []);
 
+    /*
     const deleteAlternativeProduct = (e, id) => {
         e.preventDefault();
-        InfluencerService.deleteAlternativeProduct(id).then((response) => {
+        if (user) {
+            const token = user.accessToken;
+            const config = {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            };
+        InfluencerService.deleteAlternativeProduct(id, config).then((response) => {
             if (alternativeProducts) {
                 setAlternativeProducts((prevElement) => {
                     return prevElement.filter((alternativeProduct) => alternativeProduct.id !== id);
@@ -54,8 +142,7 @@ const InfluencerDashboard = () => {
             }
         });
     };
-
-
+    
     const deleteProposedIngredient = (e, id) => {
         e.preventDefault();
         InfluencerService.deleteProposedIngredient(id).then((response) => {
@@ -67,15 +154,15 @@ const InfluencerDashboard = () => {
         })
 
     };
-
+    */
     const editAlternativeProduct = (e, id) => {
         e.preventDefault();
-        navigate('/UpdateAlternativeProduct/' + id);
+        navigate("/UpdateAlternativeProduct/" + id);
     };
 
     const editProposedIngredient = (e, id) => {
         e.preventDefault();
-        navigate('/UpdateProposedIngredient/' + id)
+        navigate("/UpdateProposedIngredient/" + id)
     };
 
     return (
@@ -88,10 +175,10 @@ const InfluencerDashboard = () => {
                 <thead>
                     <tr>
                         <th colspan='3'><h5>Your suggestion list:</h5></th>
-                        <th style={{ textAlign: 'right' }}><a href='AlternativeProductForm'><button type="button" className="btn btn-success">Create new</button></a></th>
+                        <th style={{ textAlign: 'right' }}><a href="/AlternativeProductForm"><button type="button" className="btn btn-success">Create new</button></a></th>
                     </tr>
                 </thead>
-                {!loading && (
+                {alternativeProducts && (
                     <tbody>
                         {alternativeProducts.map((alternativeProduct) => (
                             <tr key={alternativeProduct.id}>
@@ -119,7 +206,7 @@ const InfluencerDashboard = () => {
                 <thead>
                     <tr>
                         <th colspan='3'><h5>Your ingredient watchlist proposals:</h5></th>
-                        <th style={{ textAlign: 'right' }}><a href='ProposedIngredientForm'><button type="button" className="btn btn-success">Create new</button></a></th>
+                        <th style={{ textAlign: 'right' }}><a href="/ProposedIngredientForm"><button type="button" className="btn btn-success">Create new</button></a></th>
                     </tr>
                     <tr>
                         <th>Ingredient</th>
@@ -128,7 +215,7 @@ const InfluencerDashboard = () => {
                         <th></th>
                     </tr>
                 </thead>
-                {!loading && (
+                {proposedIngredients && (
                     <tbody>
                         {proposedIngredients.map((proposedIngredient) => (
                        <tr key={proposedIngredient.id}>

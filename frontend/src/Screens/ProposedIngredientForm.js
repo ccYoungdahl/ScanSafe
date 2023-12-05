@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import InfluencerService from '../Services/InfluencerService';
+import axios from 'axios';
 import AuthService from '../Services/AuthService';
 
 const ProposedIngredientForm = () => {
 
     const navigate = useNavigate();
     const [checkProposal, setCheckProposal] = useState();
+  
 
     const [proposedIngredient, setProposedIngredient] = useState({
         name: "",
@@ -20,6 +22,7 @@ const ProposedIngredientForm = () => {
         setProposedIngredient({ ...proposedIngredient, [e.target.name]: value });
     };
 
+    /*
     const saveProposedIngredient = (e) => {
         e.preventDefault();
         InfluencerService.saveProposedIngredient(proposedIngredient).then((response) => {
@@ -28,7 +31,28 @@ const ProposedIngredientForm = () => {
         });
         navigate('/InfluencerDashboard');
     };
+    */
+    function saveProposedIngredient(e) {
+        e.preventDefault();
+        const user = AuthService.getCurrentUser();
+        if (user) {
+            const token = user.accessToken;
+            const config = {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            };
 
+            axios.post("http://localhost:8080/api/proposedIngredients/save",
+                proposedIngredient, config).then(response => {
+                    console.log(response);
+                    window.location.reload(false);
+                }).catch(error => {
+                    console.log(error);
+                })
+        }
+        navigate("/InfluencerDashboard");
+    }
     function handleRedirects() {
         const roles = AuthService.getCurrentUser().roles;
         if (roles.includes("ROLE_USER")) {
@@ -38,6 +62,7 @@ const ProposedIngredientForm = () => {
             navigate("/admin");
         }
     }
+
 
     const openModal = (e) => {
         e.preventDefault();

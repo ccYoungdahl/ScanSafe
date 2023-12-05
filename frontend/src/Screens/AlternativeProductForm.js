@@ -1,24 +1,25 @@
 import React, { useState } from "react";
 import { useNavigate } from 'react-router-dom';
 import InfluencerService from "../Services/InfluencerService";
+import axios from 'axios';
+import AuthService from "../Services/AuthService";
 
 const AlternativeProductForm = () => {
 
     const navigate = useNavigate();
 
     const [alternativeProduct, setAlternativeProduct] = useState({
-
         altProduct: "",
         replacesProduct: "",
         upc: "",
-        notes: ""
+        notes: "",
     });
 
     const handleChange = (e) => {
         const value = e.target.value;
         setAlternativeProduct({ ...alternativeProduct, [e.target.name]: value });
     };
-
+    /*
     const saveAlternativeProduct = (e) => {
         e.preventDefault();
         InfluencerService.saveAlternativeProduct(alternativeProduct).then((response) => {
@@ -27,7 +28,28 @@ const AlternativeProductForm = () => {
         });
         navigate("/InfluencerDashboard");
     };
+    */
+    function saveAlternativeProduct(e) {
+        e.preventDefault();
+        const user = AuthService.getCurrentUser();
+        if (user) {
+            const token = user.accessToken;
+            const config = {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            };
 
+            axios.post("http://localhost:8080/api/alternativeProducts/save",
+                alternativeProduct, config).then(response => {
+                    console.log(response);
+                    window.location.reload(false);
+                }).catch(error => {
+                    console.log(error);
+                })
+        }
+        navigate("/InfluencerDashboard");
+    }
 
  return (
             <div className="container pt-5">

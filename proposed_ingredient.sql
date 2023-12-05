@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 05, 2023 at 12:14 AM
+-- Generation Time: Dec 05, 2023 at 01:37 PM
 -- Server version: 10.4.21-MariaDB
 -- PHP Version: 8.0.11
 
@@ -35,18 +35,18 @@ CREATE TABLE `proposed_ingredient` (
   `rejected` bit(1) NOT NULL,
   `risk` varchar(255) DEFAULT NULL,
   `website` varchar(255) DEFAULT NULL,
-  `user_id` bigint(20) NOT NULL
+  `username` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `proposed_ingredient`
 --
 
-INSERT INTO `proposed_ingredient` (`id`, `approved`, `comments`, `name`, `rejected`, `risk`, `website`, `user_id`) VALUES
-(1, b'0', 'This stuff is super dangerous', 'Gluten', b'1', 'Allergic reaction', 'www.glutenisbad.com', 0),
-(12, b'0', 'I can tell when I eat something containing this ingredient', 'Red 40', b'0', 'Allergic reaction', 'www.whatswrongwithred40.org', 0),
-(45, b'1', 'MSG is not healthy and should be banned!', 'Monosodium Glutamate', b'0', 'Potentially impairs brain growth and development.', 'https://www.healthline.com/nutrition/common-food-additives#TOC_TITLE_HDR_2', 0),
-(46, b'0', 'In moderate amounts it\'s okay, but it still can cause swelling and cramps.', 'Guar Gum', b'1', 'Can cause swelling in the small intestine.', 'https://www.sciencedirect.com/topics/medicine-and-dentistry/guar-gum#:~:text=Guar%20gum%20causes%20abdominal%20pain,cause%20occupational%20rhinitis%20and%20asthma.', 0);
+INSERT INTO `proposed_ingredient` (`id`, `approved`, `comments`, `name`, `rejected`, `risk`, `website`, `username`) VALUES
+(1, b'0', 'This stuff is super dangerous', 'Gluten', b'1', 'Allergic reaction', 'www.glutenisbad.com', 'influencer'),
+(12, b'0', 'I can tell when I eat something containing this ingredient', 'Red 40', b'0', 'Causes migraine headheaches.', 'www.whatswrongwithred40.org', 'influencer'),
+(45, b'1', 'MSG is not healthy and should be banned!', 'Monosodium Glutamate', b'0', 'Potentially impairs brain growth and development.', 'https://www.healthline.com/nutrition/common-food-additives#TOC_TITLE_HDR_2', 'influencer'),
+(46, b'0', 'In moderate amounts it\'s okay, but it still can cause swelling and cramps.', 'Guar Gum', b'1', 'Can cause swelling in the small intestine.', 'https://www.sciencedirect.com/topics/medicine-and-dentistry/guar-gum#:~:text=Guar%20gum%20causes%20abdominal%20pain,cause%20occupational%20rhinitis%20and%20asthma.', NULL);
 
 --
 -- Indexes for dumped tables
@@ -66,7 +66,7 @@ ALTER TABLE `proposed_ingredient`
 -- AUTO_INCREMENT for table `proposed_ingredient`
 --
 ALTER TABLE `proposed_ingredient`
-  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=47;
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=48;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
