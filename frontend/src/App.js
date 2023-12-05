@@ -14,7 +14,10 @@ import Profile from "./Screens/Profile";
 import Navbar from "./components/Navbar";
 import AuthService from "./Services/AuthService";
 import {useEffect, useState} from "react";
-
+import admin from "./Screens/Admin";
+import Admin from "./Screens/Admin";
+import Proposals from "./Screens/Proposals";
+import Pizzatime from "./Screens/Pizzatime";
 function App() {
 
   return (
@@ -33,6 +36,9 @@ function App() {
         <Route path="UpdateProposedIngredient/:id" element={<UpdateProposedIngredient /> } />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
+        <Route path="admin" element={<Admin />} />
+        <Route path="proposals" element={<Proposals/>}/>
+        <Route path="pizzatime" element={<Pizzatime/>}/>
       </Routes>
     </Router>
   );

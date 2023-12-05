@@ -6,17 +6,19 @@ import io.jsonwebtoken.security.Keys;
 import java.security.Key;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-
+import scansafe.app.scansafeapi.User.response.MessageResponse;
+import org.springframework.http.ResponseEntity;
 /**
  *
  * @author Robby Martin
  */
 @RestController
 @RequestMapping("/api/alternativeProducts")
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin(origins = "*")
 public class AlternativeProductsController {
     
     @Autowired
@@ -45,6 +47,12 @@ public class AlternativeProductsController {
         String username = getUserNameFromJwtToken(token.substring(7, token.length()));
         alternativeProduct.setUsername(username);
         return alternativeProductRepo.save(alternativeProduct);
+    }
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<?> deleteProduct(@PathVariable("id") Long id) {
+        AlternativeProducts alt = alternativeProductRepo.findById(id).orElseThrow(() -> new RuntimeException("Error: Product is not found."));
+        alternativeProductRepo.deleteById(id);
+        return ResponseEntity.ok(new MessageResponse("deleted"));
     }
     
     @DeleteMapping("/delete/{id}")

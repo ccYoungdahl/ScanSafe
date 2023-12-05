@@ -4,6 +4,12 @@ import lombok.Getter;
 import lombok.Setter;
 
 import jakarta.persistence.*;
+import scansafe.app.scansafeapi.User.User;
+
+import java.util.HashSet;
+import java.util.Set;
+
+import static org.hibernate.internal.util.collections.ArrayHelper.forEach;
 
 @Setter
 @Getter
@@ -22,4 +28,5 @@ public class Role {
     public Role(){
 
     }
+
 }
