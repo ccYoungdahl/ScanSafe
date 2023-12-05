@@ -42,11 +42,11 @@ const AlternativeProductForm = () => {
 
             axios.post("http://localhost:8080/api/alternativeProducts/save",
                 alternativeProduct, config).then(response => {
-                console.log(response);
-                window.location.reload(false);
-            }).catch(error => {
-                console.log(error);
-            })
+                    console.log(response);
+                    window.location.reload(false);
+                }).catch(error => {
+                    console.log(error);
+                })
         }
         navigate("/InfluencerDashboard");
     }

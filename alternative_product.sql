@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 05, 2023 at 12:14 AM
+-- Generation Time: Dec 05, 2023 at 01:37 PM
 -- Server version: 10.4.21-MariaDB
 -- PHP Version: 8.0.11
 
@@ -33,17 +33,19 @@ CREATE TABLE `alternative_product` (
   `notes` varchar(255) DEFAULT NULL,
   `replaces_product` varchar(255) DEFAULT NULL,
   `upc` varchar(255) DEFAULT NULL,
-  `user_id` bigint(20) NOT NULL
+  `username` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `alternative_product`
 --
 
-INSERT INTO `alternative_product` (`id`, `alt_product`, `notes`, `replaces_product`, `upc`, `user_id`) VALUES
-(102, 'Beanfields Nacho Cheese Chips', 'So tasty!', 'Doritos', '058449410003', 0),
-(103, 'Olipop Lemon Lime Soda', 'Tastes so sugary and good you\'d thought it really was Mountain Dew!', 'Mountain Dew', '028400516464', 0),
-(104, 'Nature\'s Path Organic Frosted Strawberry Toaster Pastries', 'Love these pastries!', 'Kellog\'s Strawberry Pop-Tarts', '028400516464', 0);
+INSERT INTO `alternative_product` (`id`, `alt_product`, `notes`, `replaces_product`, `upc`, `username`) VALUES
+(102, 'Beanfields Nacho Cheese Chips', 'So tasty!', 'Doritos', '058449410003', 'influencer'),
+(103, 'Olipop Lemon Lime Soda', 'Tastes so sugary and good you\'d thought it really was Mountain Dew!', 'Mountain Dew', '028400516464', 'influencer'),
+(104, 'Nature\'s Path Organic Frosted Strawberry Toaster Pastries', 'Love these pastries!', 'Kellog\'s Strawberry Pop-Tarts', '028400516464', 'influencer'),
+(105, 'Natural Bliss Vanilla Almond Milk Creamer ', 'The taste is exactly the same; you won\'t ever tell the difference!', 'Coffee-Mate\'s Vanilla Bean Liquid Creamer', '050000322756', 'influencer'),
+(109, '', '', '', '', NULL);
 
 --
 -- Indexes for dumped tables
@@ -63,7 +65,7 @@ ALTER TABLE `alternative_product`
 -- AUTO_INCREMENT for table `alternative_product`
 --
 ALTER TABLE `alternative_product`
-  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=105;
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=110;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

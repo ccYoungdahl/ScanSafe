@@ -125,7 +125,14 @@ function InfluencerDashboard() {
     /*
     const deleteAlternativeProduct = (e, id) => {
         e.preventDefault();
-        InfluencerService.deleteAlternativeProduct(id).then((response) => {
+        if (user) {
+            const token = user.accessToken;
+            const config = {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            };
+        InfluencerService.deleteAlternativeProduct(id, config).then((response) => {
             if (alternativeProducts) {
                 setAlternativeProducts((prevElement) => {
                     return prevElement.filter((alternativeProduct) => alternativeProduct.id !== id);
@@ -134,7 +141,6 @@ function InfluencerDashboard() {
         });
     };
     
-
     const deleteProposedIngredient = (e, id) => {
         e.preventDefault();
         InfluencerService.deleteProposedIngredient(id).then((response) => {
@@ -167,7 +173,7 @@ function InfluencerDashboard() {
                 <thead>
                     <tr>
                         <th colspan='3'><h5>Your suggestion list:</h5></th>
-                        <th style={{ textAlign: 'right' }}><a href='AlternativeProductForm'><button type="button" className="btn btn-success">Create new</button></a></th>
+                        <th style={{ textAlign: 'right' }}><a href="AlternativeProductForm"><button type="button" className="btn btn-success">Create new</button></a></th>
                     </tr>
                 </thead>
                 {alternativeProducts && (
