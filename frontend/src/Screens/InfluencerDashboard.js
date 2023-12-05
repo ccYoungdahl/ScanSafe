@@ -64,7 +64,6 @@ function InfluencerDashboard() {
         }
     }
 
-
     function deleteAlternativeProduct(e, id) {
         e.preventDefault();
         const user = AuthService.getCurrentUser();
@@ -75,7 +74,7 @@ function InfluencerDashboard() {
                     Authorization: `Bearer ${token}`
                 }
             };
-            axios.delete(`http://localhost:8080/api/alternativeProducts/delete/${id}`, config).then(response => {
+            axios.delete("http://localhost:8080/api/alternativeProducts/delete/" + id, config).then(response => {
                 console.log(response);
                 window.location.reload(false);
             }).catch(error => {
@@ -94,7 +93,7 @@ function InfluencerDashboard() {
                     Authorization: `Bearer ${token}`
                 }
             };
-            axios.delete(`http://localhost:8080/api/proposedIngredients/delete/${id}`, config).then(response => {
+            axios.delete("http://localhost:8080/api/proposedIngredients/delete/" + id, config).then(response => {
                 console.log(response);
                 window.location.reload(false);
             }).catch(error => {
@@ -103,10 +102,8 @@ function InfluencerDashboard() {
         }
     }
 
-
-
     useEffect(() => {
-           /*
+          /*
         const fetchData = async () => {
             setLoading(true);
             try {
@@ -124,10 +121,6 @@ function InfluencerDashboard() {
         */
         getAlternativeProducts();
         getProposedIngredients();
-
-
-        fetchData();
-
         handleRedirects();
     }, []);
 
@@ -164,12 +157,12 @@ function InfluencerDashboard() {
     */
     const editAlternativeProduct = (e, id) => {
         e.preventDefault();
-        navigate('/UpdateAlternativeProduct/' + id);
+        navigate("/UpdateAlternativeProduct/" + id);
     };
 
     const editProposedIngredient = (e, id) => {
         e.preventDefault();
-        navigate('/UpdateProposedIngredient/' + id)
+        navigate("/UpdateProposedIngredient/" + id)
     };
 
     return (
@@ -182,7 +175,7 @@ function InfluencerDashboard() {
                 <thead>
                     <tr>
                         <th colspan='3'><h5>Your suggestion list:</h5></th>
-                        <th style={{ textAlign: 'right' }}><a href="AlternativeProductForm"><button type="button" className="btn btn-success">Create new</button></a></th>
+                        <th style={{ textAlign: 'right' }}><a href="/AlternativeProductForm"><button type="button" className="btn btn-success">Create new</button></a></th>
                     </tr>
                 </thead>
                 {alternativeProducts && (
@@ -213,7 +206,7 @@ function InfluencerDashboard() {
                 <thead>
                     <tr>
                         <th colspan='3'><h5>Your ingredient watchlist proposals:</h5></th>
-                        <th style={{ textAlign: 'right' }}><a href='ProposedIngredientForm'><button type="button" className="btn btn-success">Create new</button></a></th>
+                        <th style={{ textAlign: 'right' }}><a href="/ProposedIngredientForm"><button type="button" className="btn btn-success">Create new</button></a></th>
                     </tr>
                     <tr>
                         <th>Ingredient</th>

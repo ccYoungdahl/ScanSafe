@@ -28,11 +28,11 @@ class InfluencerService {
     updateProposedIngredient(proposedIngredient, id) {
         return axios.put(PROPOSED_INGREDIENT_API_BASE_URL + "/propIngredient/" + id, proposedIngredient);
     }
-
+    /*
     getAlternativeProducts() {
         return axios.get(ALTERNATIVE_PRODUCT_API_BASE_URL + "/all");
     }
-
+    */
     saveAlternativeProduct(alternativeProduct) {
         return axios.post(ALTERNATIVE_PRODUCT_API_BASE_URL + "/save", alternativeProduct);
     }
@@ -49,7 +49,6 @@ class InfluencerService {
         return axios.put(ALTERNATIVE_PRODUCT_API_BASE_URL + "/altProduct/" + id, alternativeProduct);
     }
 
-    
 }
 
 export default new InfluencerService();

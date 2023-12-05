@@ -22,6 +22,7 @@ public class AlternativeProducts {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
+    private long userId;
     private String username;
     private String altProduct;
     private String replacesProduct;

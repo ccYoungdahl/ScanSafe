@@ -38,11 +38,6 @@ public class AlternativeProductsController {
         return alternativeProductRepo.findByUpc(upc);
     }
 
-    @GetMapping("/{upc}")
-    @PreAuthorize("hasRole('USER') or hasRole('INFLUENCER') or hasRole('ADMIN')")
-    public List<AlternativeProducts> getAlternativeProductsFromUPC(@PathVariable("upc") String upc) {
-        return alternativeProductRepo.findByUpc(upc);
-    }
     
     @PostMapping("/save")
     @PreAuthorize("hasRole('USER') or hasRole('INFLUENCER') or hasRole('ADMIN')")

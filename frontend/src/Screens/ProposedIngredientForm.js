@@ -1,9 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import InfluencerService from '../Services/InfluencerService';
-
 import axios from 'axios';
-
 import AuthService from '../Services/AuthService';
 
 const ProposedIngredientForm = () => {
@@ -65,15 +63,6 @@ const ProposedIngredientForm = () => {
         }
     }
 
-    function handleRedirects() {
-        const roles = AuthService.getCurrentUser().roles;
-        if (roles.includes("ROLE_USER")) {
-            navigate("/");
-        }
-        if (roles.includes("ROLE_ADMIN")) {
-            navigate("/admin");
-        }
-    }
 
     const openModal = (e) => {
         e.preventDefault();

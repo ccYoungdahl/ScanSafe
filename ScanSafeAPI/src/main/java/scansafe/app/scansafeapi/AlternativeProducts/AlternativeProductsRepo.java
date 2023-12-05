@@ -10,8 +10,7 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public interface AlternativeProductsRepo extends JpaRepository<AlternativeProducts, Long> {
-    
-
+   
     List<AlternativeProducts> findByUsername(String username);
     List<AlternativeProducts> findByUserId(long userId);
     List<AlternativeProducts> findByUpc(String upc);
